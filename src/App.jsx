@@ -189,8 +189,8 @@ export default function GoodFruitClub() {
             { icon: "🚪", text: "Delivered to your door" },
           ].map((s, i) => (
             <div key={i} style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 24, marginBottom: 4 }}>{s.icon}</div>
-              <div style={{ color: "#fff", fontSize: 12.5, fontWeight: 500, opacity: 0.9 }}>{s.text}</div>
+              <div style={{ fontSize: 36, marginBottom: 8 }}>{s.icon}</div>
+              <div style={{ color: "#fff", fontSize: 20, fontWeight: 500, opacity: 0.9, lineHeight: 1.35 }}>{s.text}</div>
             </div>
           ))}
         </div>
@@ -296,7 +296,7 @@ export default function GoodFruitClub() {
       <footer style={{
         background: BRAND.greenDark, padding: "36px 20px 100px", textAlign: "center",
       }}>
-        <img src="/logo-white.svg" alt="Good Fruit Club" style={{ height: 56, width: "auto", marginBottom: 10 }} />
+        <img src="/logo-white.svg" alt="Good Fruit Club" style={{ height: 140, width: "auto", marginBottom: 10 }} />
         <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 13, margin: "0 0 16px" }}>
           Fresh finds, delivered home · Gurgaon
         </p>
