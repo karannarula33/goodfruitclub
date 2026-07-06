@@ -91,12 +91,12 @@ const FRUITS = [
   ]},
   { category: "Seasonal Favourites", items: [
 {
-      name: "Shimla Cherry",
-      tagline: "Hand-picked Himalayan cherries — juicy, firm, deeply sweet",
+      name: "Afghan Cherry",
+      tagline: "Plump, dark, and intensely sweet — Afghan cherries are in a league of their own",
       unit: "box", step: 1, min: 1,
-      basePrice: 850,
-      tiers: [{ minQty: 2, pricePerUnit: 800 }],
-      badge: "New", img: "/fruits/cherry.jpg", color: "#BE123C",
+      basePrice: 750,
+      tiers: [],
+      badge: "New", img: "/fruits/afghancherry.jpg", color: "#BE123C",
     },
     {
       name: "Jamun",
