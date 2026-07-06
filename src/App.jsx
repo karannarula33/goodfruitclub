@@ -24,8 +24,8 @@ const FRUITS = [
       name: "Safeda Mango",
       tagline: "Light, refreshing, with just the right tang. Great on its own or for aamras",
       unit: "kg", step: 0.5, min: 1,
-      basePrice: 160,
-      tiers: [{ minQty: 2.5, pricePerUnit: 124 }, { minQty: 5, pricePerUnit: 134 }],
+      basePrice: 200,
+      tiers: [],
       img: "/fruits/safeda.jpg", color: "#EAB308",
     },
     {
