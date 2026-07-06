@@ -28,6 +28,22 @@ const FRUITS = [
       tiers: [{ minQty: 2.5, pricePerUnit: 124 }, { minQty: 5, pricePerUnit: 134 }],
       img: "/fruits/safeda.jpg", color: "#EAB308",
     },
+    {
+      name: "Dinga Mango",
+      tagline: "A mango-belt gem — chunky, fibre-free, and deeply sweet all the way through",
+      unit: "kg", step: 0.5, min: 1,
+      basePrice: 200,
+      tiers: [],
+      img: "/fruits/dinga.jpg", color: "#F59E0B",
+    },
+    {
+      name: "Banarsi Langda",
+      tagline: "The Banarsi classic — tangy-sweet with a distinctive green skin even at full ripeness",
+      unit: "kg", step: 0.5, min: 1,
+      basePrice: 225,
+      tiers: [],
+      img: "/fruits/langda.jpg", color: "#84CC16",
+    },
   ]},
   { category: "Citrus", items: [
     {
@@ -83,12 +99,12 @@ const FRUITS = [
       img: "/fruits/jamun.jpg", color: "#7C3AED",
     },
     {
-      name: "Indian Plum",
-      tagline: "Tart, crunchy, and deeply refreshing",
+      name: "Kashmir Plums",
+      tagline: "Mountain-grown and deep red — jammy inside, sweet with a pleasant tartness",
       unit: "kg", step: 0.5, min: 1,
-      basePrice: 535,
+      basePrice: 390,
       tiers: [],
-      img: "/fruits/plum.jpg", color: "#9333EA",
+      img: "/fruits/kashmirplums.jpg", color: "#9333EA",
     },
   ]},
   { category: "Exotics & Everyday", items: [
@@ -131,6 +147,14 @@ const FRUITS = [
       basePrice: 100,
       tiers: [{ minQty: 2.5, pricePerUnit: 96 }, { minQty: 5, pricePerUnit: 94 }],
       img: "/fruits/papaya.jpg", color: "#EA580C",
+    },
+    {
+      name: "Red Globe Grapes",
+      tagline: "Large, firm, and deeply sweet — the real thing, not the watery supermarket kind",
+      unit: "kg", step: 0.5, min: 1,
+      basePrice: 520,
+      tiers: [],
+      img: "/fruits/redglobegrapes.jpg", color: "#BE123C",
     },
   ]},
 ];
