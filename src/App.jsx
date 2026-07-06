@@ -66,15 +66,7 @@ const FRUITS = [
     },
   ]},
   { category: "Seasonal Favourites", items: [
-    {
-      name: "Premium Lychee",
-      tagline: "Fat, juicy, rose-scented — the kind that reminds you of summers at nani's house",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 380,
-      tiers: [],
-      badge: "Limited Season", img: "/fruits/litchi.jpg", color: "#E11D48",
-    },
-    {
+{
       name: "Shimla Cherry",
       tagline: "Hand-picked Himalayan cherries — juicy, firm, deeply sweet",
       unit: "box", step: 1, min: 1,
@@ -139,14 +131,6 @@ const FRUITS = [
       basePrice: 100,
       tiers: [{ minQty: 2.5, pricePerUnit: 96 }, { minQty: 5, pricePerUnit: 94 }],
       img: "/fruits/papaya.jpg", color: "#EA580C",
-    },
-    {
-      name: "Madhu Kharbuja",
-      tagline: "Sweet, aromatic summer melon — best served chilled",
-      unit: "pc", step: 1, min: 1,
-      basePrice: 130,
-      tiers: [{ minQty: 2, pricePerUnit: 125 }],
-      img: "/fruits/kharbuja.jpg", color: "#CA8A04",
     },
   ]},
 ];
