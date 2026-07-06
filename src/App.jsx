@@ -16,7 +16,7 @@ const FRUITS = [
       name: "Malihabadi Dasheri Mango",
       tagline: "Malihabadi Dasheri at peak ripeness — sun-kissed golden, buttery soft, unmistakable sweet nectar.",
       unit: "kg", step: 0.5, min: 1,
-      basePrice: 280,
+      basePrice: 290,
       tiers: [{ minQty: 5, pricePerUnit: 270 }, { minQty: 10, pricePerUnit: 265 }],
       badge: "Best Seller", img: "/fruits/dasheri.jpg", color: "#F59E0B",
     },
@@ -43,6 +43,14 @@ const FRUITS = [
       basePrice: 225,
       tiers: [],
       img: "/fruits/langda.jpg", color: "#84CC16",
+    },
+    {
+      name: "Chausa Mango",
+      tagline: "Thin-skinned, silky smooth, and intensely sweet — one of the finest mangoes of the season",
+      unit: "kg", step: 0.5, min: 1,
+      basePrice: 285,
+      tiers: [],
+      img: "/fruits/chausa.jpg", color: "#F59E0B",
     },
   ]},
   { category: "Citrus", items: [
