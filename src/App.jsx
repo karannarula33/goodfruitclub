@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const BRAND = {
   green: "#1B4332",
@@ -18,7 +18,7 @@ const FRUITS = [
       unit: "kg", step: 0.5, min: 1,
       basePrice: 290,
       tiers: [{ minQty: 5, pricePerUnit: 270 }, { minQty: 10, pricePerUnit: 265 }],
-      badge: "Best Seller", img: "/fruits/dasheri.jpg", color: "#F59E0B",
+      badge: "Best Seller", images: ["/fruits/dasheri.jpg"], color: "#F59E0B",
     },
     {
       name: "Safeda Mango",
@@ -26,7 +26,7 @@ const FRUITS = [
       unit: "kg", step: 0.5, min: 1,
       basePrice: 200,
       tiers: [],
-      img: "/fruits/safeda.jpg", color: "#EAB308",
+      images: ["/fruits/safeda.jpg"], color: "#EAB308",
     },
     {
       name: "Dinga Mango",
@@ -34,7 +34,7 @@ const FRUITS = [
       unit: "kg", step: 0.5, min: 1,
       basePrice: 200,
       tiers: [],
-      img: "/fruits/dinga.jpg", color: "#F59E0B",
+      images: ["/fruits/dinga.jpg"], color: "#F59E0B",
     },
     {
       name: "Banarsi Langda",
@@ -42,7 +42,7 @@ const FRUITS = [
       unit: "kg", step: 0.5, min: 1,
       basePrice: 225,
       tiers: [],
-      img: "/fruits/langda.jpg", color: "#84CC16",
+      images: ["/fruits/langda.jpg"], color: "#84CC16",
     },
     {
       name: "Chausa Mango",
@@ -50,7 +50,7 @@ const FRUITS = [
       unit: "kg", step: 0.5, min: 1,
       basePrice: 285,
       tiers: [],
-      img: "/fruits/chausa.jpg", color: "#F59E0B",
+      images: ["/fruits/chausa.jpg"], color: "#F59E0B",
     },
   ]},
   { category: "Citrus", items: [
@@ -60,7 +60,7 @@ const FRUITS = [
       unit: "kg", step: 0.5, min: 1,
       basePrice: 270,
       tiers: [{ minQty: 2.5, pricePerUnit: 240 }, { minQty: 5, pricePerUnit: 231 }],
-      img: "/fruits/malta.jpg", color: "#F97316",
+      images: ["/fruits/malta.jpg"], color: "#F97316",
     },
     {
       name: "Mandarin Orange",
@@ -68,7 +68,7 @@ const FRUITS = [
       unit: "kg", step: 0.5, min: 1,
       basePrice: 300,
       tiers: [{ minQty: 2.5, pricePerUnit: 280 }, { minQty: 5, pricePerUnit: 260 }],
-      img: "/fruits/mandarin.jpg", color: "#EA580C",
+      images: ["/fruits/mandarin.jpg"], color: "#EA580C",
     },
   ]},
   { category: "Apples & Pears", items: [
@@ -78,7 +78,7 @@ const FRUITS = [
       unit: "kg", step: 0.5, min: 1,
       basePrice: 440,
       tiers: [{ minQty: 2.5, pricePerUnit: 410 }, { minQty: 5, pricePerUnit: 400 }],
-      badge: "Premium", img: "/fruits/apple.jpg", color: "#DC2626",
+      badge: "Premium", images: ["/fruits/apple.jpg"], color: "#DC2626",
     },
     {
       name: "Pear",
@@ -86,7 +86,7 @@ const FRUITS = [
       unit: "kg", step: 0.5, min: 1,
       basePrice: 340,
       tiers: [{ minQty: 2.5, pricePerUnit: 318 }, { minQty: 5, pricePerUnit: 298 }],
-      img: "/fruits/pear.jpg", color: "#84CC16",
+      images: ["/fruits/pear.jpg"], color: "#84CC16",
     },
   ]},
   { category: "Seasonal Favourites", items: [
@@ -96,7 +96,7 @@ const FRUITS = [
       unit: "box", step: 1, min: 1,
       basePrice: 750,
       tiers: [],
-      badge: "New", img: "/fruits/afghancherry.jpg", color: "#BE123C",
+      badge: "New", images: ["/fruits/afghancherry.jpg"], color: "#BE123C",
     },
     {
       name: "Jamun",
@@ -104,7 +104,7 @@ const FRUITS = [
       unit: "box", step: 1, min: 1,
       basePrice: 350,
       tiers: [{ minQty: 3, pricePerUnit: 330 }],
-      img: "/fruits/jamun.jpg", color: "#7C3AED",
+      images: ["/fruits/jamun.jpg"], color: "#7C3AED",
     },
     {
       name: "Kashmir Plums",
@@ -112,7 +112,7 @@ const FRUITS = [
       unit: "kg", step: 0.5, min: 1,
       basePrice: 390,
       tiers: [],
-      img: "/fruits/kashmirplums.jpg", color: "#9333EA",
+      images: ["/fruits/kashmirplums.jpg"], color: "#9333EA",
     },
   ]},
   { category: "Exotics & Everyday", items: [
@@ -122,7 +122,7 @@ const FRUITS = [
       unit: "pc", step: 1, min: 1,
       basePrice: 160,
       tiers: [{ minQty: 2, pricePerUnit: 150 }, { minQty: 4, pricePerUnit: 147.5 }],
-      img: "/fruits/avocado.jpg", color: "#166534",
+      images: ["/fruits/avocado.jpg"], color: "#166534",
     },
     {
       name: "Dragon Fruit",
@@ -130,7 +130,7 @@ const FRUITS = [
       unit: "pc", step: 1, min: 1,
       basePrice: 85,
       tiers: [{ minQty: 2, pricePerUnit: 82.5 }, { minQty: 4, pricePerUnit: 80 }],
-      img: "/fruits/dragonfruit.jpg", color: "#DB2777",
+      images: ["/fruits/dragonfruit.jpg"], color: "#DB2777",
     },
     {
       name: "Golden Kiwi",
@@ -138,7 +138,7 @@ const FRUITS = [
       unit: "box", step: 1, min: 1,
       basePrice: 500,
       tiers: [],
-      img: "/fruits/goldenkiwi.jpg", color: "#EAB308",
+      images: ["/fruits/goldenkiwi.jpg"], color: "#EAB308",
     },
     {
       name: "Green Kiwi",
@@ -146,7 +146,7 @@ const FRUITS = [
       unit: "box", step: 1, min: 1,
       basePrice: 480,
       tiers: [],
-      img: "/fruits/greenkiwi.jpg", color: "#65A30D",
+      images: ["/fruits/greenkiwi.jpg"], color: "#65A30D",
     },
     {
       name: "Papaya",
@@ -154,7 +154,7 @@ const FRUITS = [
       unit: "kg", step: 0.5, min: 1,
       basePrice: 100,
       tiers: [{ minQty: 2.5, pricePerUnit: 96 }, { minQty: 5, pricePerUnit: 94 }],
-      img: "/fruits/papaya.jpg", color: "#EA580C",
+      images: ["/fruits/papaya.jpg"], color: "#EA580C",
     },
     {
       name: "Red Globe Grapes",
@@ -162,7 +162,7 @@ const FRUITS = [
       unit: "kg", step: 0.5, min: 1,
       basePrice: 520,
       tiers: [],
-      img: "/fruits/redglobegrapes.jpg", color: "#BE123C",
+      images: ["/fruits/redglobegrapes.jpg"], color: "#BE123C",
     },
   ]},
 ];
@@ -240,6 +240,84 @@ function buildWhatsAppMessage(cart, details) {
   ].join("\n");
 }
 
+function ImageCarousel({ images, color, badge }) {
+  const [current, setCurrent] = useState(0);
+  const touchStartX = useRef(null);
+
+  function handleTouchStart(e) {
+    touchStartX.current = e.touches[0].clientX;
+  }
+
+  function handleTouchEnd(e) {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) setCurrent(c => Math.min(c + 1, images.length - 1));
+      else setCurrent(c => Math.max(c - 1, 0));
+    }
+    touchStartX.current = null;
+  }
+
+  return (
+    <div
+      style={{
+        width: "100%", aspectRatio: "4/3", position: "relative",
+        background: `linear-gradient(135deg, ${color}22, ${color}44)`,
+        overflow: "hidden",
+      }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {images.map((src, i) => (
+        <img
+          key={i}
+          src={src}
+          alt=""
+          style={{
+            position: "absolute", top: 0, left: 0,
+            width: "100%", height: "100%", objectFit: "cover",
+            transform: `translateX(${(i - current) * 100}%)`,
+            transition: "transform 0.3s ease",
+            willChange: "transform",
+          }}
+          loading="lazy"
+          onError={(e) => { e.target.style.display = "none"; }}
+        />
+      ))}
+
+      {badge && (
+        <span style={{
+          position: "absolute", top: 14, left: 14, zIndex: 1,
+          background: badge === "Best Seller" ? "#F59E0B" : badge === "Premium" ? BRAND.green : badge === "Limited Season" ? "#DC2626" : "#2563EB",
+          color: "#fff", fontSize: 11, fontWeight: 600, padding: "4px 12px",
+          borderRadius: 20, letterSpacing: 0.4, textTransform: "uppercase",
+        }}>{badge}</span>
+      )}
+
+      {images.length > 1 && (
+        <div style={{
+          position: "absolute", bottom: 10, left: 0, right: 0, zIndex: 1,
+          display: "flex", justifyContent: "center", gap: 5,
+        }}>
+          {images.map((_, i) => (
+            <div
+              key={i}
+              onClick={() => setCurrent(i)}
+              style={{
+                height: 6, borderRadius: 3,
+                width: i === current ? 18 : 6,
+                background: i === current ? "#fff" : "rgba(255,255,255,0.5)",
+                transition: "all 0.25s ease",
+                cursor: "pointer",
+              }}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 const WA_SVG = (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
@@ -272,26 +350,7 @@ function FruitCard({ item, qty, onQtyChange }) {
       boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.04)",
       marginBottom: 20, maxWidth: 420, width: "100%",
     }}>
-      <div style={{
-        width: "100%", aspectRatio: "4/3", position: "relative",
-        background: `linear-gradient(135deg, ${item.color}22, ${item.color}44)`,
-        overflow: "hidden",
-      }}>
-        <img
-          src={item.img} alt={item.name}
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          loading="lazy"
-          onError={(e) => { e.target.style.display = "none"; }}
-        />
-        {item.badge && (
-          <span style={{
-            position: "absolute", top: 14, left: 14,
-            background: item.badge === "Best Seller" ? "#F59E0B" : item.badge === "Premium" ? BRAND.green : item.badge === "Limited Season" ? "#DC2626" : "#2563EB",
-            color: "#fff", fontSize: 11, fontWeight: 600, padding: "4px 12px",
-            borderRadius: 20, letterSpacing: 0.4, textTransform: "uppercase",
-          }}>{item.badge}</span>
-        )}
-      </div>
+      <ImageCarousel images={item.images} color={item.color} badge={item.badge} />
 
       <div style={{ padding: "18px 20px 20px" }}>
         <h3 style={{ fontSize: 20, fontWeight: 700, color: BRAND.text, margin: "0 0 6px", fontFamily: "'DM Serif Display', serif" }}>{item.name}</h3>
