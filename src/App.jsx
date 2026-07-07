@@ -823,7 +823,7 @@ export default function GoodFruitClub() {
         <div style={{ background: BRAND.green, borderRadius: 16, padding: "32px 24px", color: "#fff" }}>
           <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, margin: "0 0 14px", fontWeight: 400 }}>Our Story</h2>
           <p style={{ fontSize: 14.5, lineHeight: 1.75, margin: "0 0 12px", opacity: 0.9 }}>
-            For over 20 years, our family has had a knack for finding the best fruits — knowing exactly what to pick, where to look, and what's truly worth bringing home.
+            For over 30 years, our family has had a knack for finding the best fruits — knowing exactly what to pick, where to look, and what's truly worth bringing home.
           </p>
           <p style={{ fontSize: 14.5, lineHeight: 1.75, margin: "0 0 12px", opacity: 0.9 }}>
             What started as finding the best for our own kitchen and sharing with friends and family has now become Good Fruit Club — a small, home-grown fruit service right here in Gurgaon.
