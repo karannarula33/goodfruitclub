@@ -21,14 +21,6 @@ const FRUITS = [
       badge: "Best Seller", images: ["/fruits/dasheri.jpg"], color: "#F59E0B",
     },
     {
-      name: "Safeda Mango",
-      tagline: "Light, refreshing, with just the right tang. Great on its own or for aamras",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 200,
-      tiers: [],
-      images: ["/fruits/safeda.jpg"], color: "#EAB308",
-    },
-    {
       name: "Dinga Mango",
       tagline: "A mango-belt gem — chunky, fibre-free, and deeply sweet all the way through",
       unit: "kg", step: 0.5, min: 1,
