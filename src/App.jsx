@@ -51,7 +51,7 @@ const FRUITS = [
       tagline: "Juice-heavy, fragrant, and full — not the dry kind you get at stores",
       unit: "kg", step: 0.5, min: 1,
       basePrice: 270,
-      tiers: [{ minQty: 2.5, pricePerUnit: 240 }, { minQty: 5, pricePerUnit: 231 }],
+      tiers: [{ minQty: 2.5, pricePerUnit: 260 }],
       images: ["/fruits/malta.jpg"], color: "#F97316",
     },
     {
@@ -59,7 +59,7 @@ const FRUITS = [
       tagline: "Easy to peel, naturally sweet, almost zero acidity",
       unit: "kg", step: 0.5, min: 1,
       basePrice: 300,
-      tiers: [{ minQty: 2.5, pricePerUnit: 280 }, { minQty: 5, pricePerUnit: 260 }],
+      tiers: [{ minQty: 5, pricePerUnit: 280 }],
       images: ["/fruits/mandarin.jpg"], color: "#EA580C",
     },
   ]},
