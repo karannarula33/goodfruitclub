@@ -24,8 +24,8 @@ const FRUITS = [
       name: "Dinga Mango",
       tagline: "A mango-belt gem — chunky, fibre-free, and deeply sweet all the way through",
       unit: "kg", step: 0.5, min: 1,
-      basePrice: 200,
-      tiers: [{ minQty: 10, pricePerUnit: 190 }],
+      basePrice: 250,
+      tiers: [{ minQty: 10, pricePerUnit: 240 }],
       images: ["/fruits/dinga.jpg"], color: "#F59E0B",
     },
     {
