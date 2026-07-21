@@ -91,6 +91,14 @@ const FRUITS = [
       badge: "New", images: ["/fruits/afghancherry.jpg"], color: "#BE123C",
     },
     {
+      name: "Afghan Khurmani (Apricot)",
+      tagline: "Sun-ripened Afghan apricots — golden-orange, honeyed, and richly aromatic (700g box)",
+      unit: "box", step: 1, min: 1,
+      basePrice: 680,
+      tiers: [],
+      images: ["/fruits/afghankhurmani.jpeg"], color: "#F59E0B",
+    },
+    {
       name: "Jamun",
       tagline: "Sweet-tart bite that just means summer. Plump, deep purple (400gm box)",
       unit: "box", step: 1, min: 1,
@@ -105,6 +113,14 @@ const FRUITS = [
       basePrice: 390,
       tiers: [],
       images: ["/fruits/kashmirplums.jpg"], color: "#9333EA",
+    },
+    {
+      name: "Mariposa Plums",
+      tagline: "Glossy maroon skin, blood-red flesh — intensely juicy and sweet with a pleasantly tart bite",
+      unit: "kg", step: 0.5, min: 1,
+      basePrice: 420,
+      tiers: [],
+      images: ["/fruits/mariposaplum.jpg"], color: "#9333EA",
     },
   ]},
   { category: "Exotics & Everyday", items: [
@@ -155,6 +171,14 @@ const FRUITS = [
       basePrice: 520,
       tiers: [{ minQty: 2, pricePerUnit: 500 }],
       images: ["/fruits/redglobegrapes.jpg"], color: "#BE123C",
+    },
+    {
+      name: "Muscat Grapes",
+      tagline: "The aromatic classic — exceptionally sweet with a firm, seedless bite and absolutely zero tartness (500g box)",
+      unit: "box", step: 1, min: 1,
+      basePrice: 500,
+      tiers: [],
+      badge: "Pre-Order", images: ["/fruits/muscatgrapes.jpg"], color: "#4D7C0F",
     },
   ]},
 ];
