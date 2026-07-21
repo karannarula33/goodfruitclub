@@ -13,14 +13,6 @@ const BRAND = {
 const FRUITS = [
   { category: "Mangoes", items: [
     {
-      name: "Malihabadi Dasheri Mango",
-      tagline: "Malihabadi Dasheri at peak ripeness — sun-kissed golden, buttery soft, unmistakable sweet nectar.",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 290,
-      tiers: [{ minQty: 10, pricePerUnit: 275 }],
-      badge: "Best Seller", images: ["/fruits/dasheri.jpg"], color: "#F59E0B",
-    },
-    {
       name: "Dinga Mango",
       tagline: "A mango-belt gem — chunky, fibre-free, and deeply sweet all the way through",
       unit: "kg", step: 0.5, min: 1,
