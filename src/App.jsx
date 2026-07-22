@@ -61,7 +61,7 @@ const FRUITS = [
       tagline: "Imported, firm, and genuinely sweet — the kind that actually crunches",
       unit: "kg", step: 0.5, min: 1,
       basePrice: 450,
-      tiers: [{ minQty: 2.5, pricePerUnit: 419 }, { minQty: 5, pricePerUnit: 438 }],
+      tiers: [{ minQty: 2.5, pricePerUnit: 445 }, { minQty: 5, pricePerUnit: 438 }],
       badge: "Premium", images: ["/fruits/apple.jpg"], color: "#DC2626",
     },
     {
