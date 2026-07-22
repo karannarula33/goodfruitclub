@@ -13,12 +13,12 @@ const BRAND = {
 const FRUITS = [
   { category: "Mangoes", items: [
     {
-      name: "Dinga Mango",
-      tagline: "A mango-belt gem — chunky, fibre-free, and deeply sweet all the way through",
+      name: "Chausa Mango",
+      tagline: "Thin-skinned, silky smooth, and intensely sweet — one of the finest mangoes of the season",
       unit: "kg", step: 0.5, min: 1,
-      basePrice: 275,
-      tiers: [{ minQty: 10, pricePerUnit: 265 }],
-      images: ["/fruits/dinga.jpg"], color: "#F59E0B",
+      basePrice: 295,
+      tiers: [{ minQty: 10, pricePerUnit: 290 }],
+      images: ["/fruits/chausa.jpg"], color: "#F59E0B",
     },
     {
       name: "Banarsi Langda",
@@ -29,12 +29,12 @@ const FRUITS = [
       images: ["/fruits/langda.jpg"], color: "#84CC16",
     },
     {
-      name: "Chausa Mango",
-      tagline: "Thin-skinned, silky smooth, and intensely sweet — one of the finest mangoes of the season",
+      name: "Dinga Mango",
+      tagline: "A mango-belt gem — chunky, fibre-free, and deeply sweet all the way through",
       unit: "kg", step: 0.5, min: 1,
-      basePrice: 295,
-      tiers: [{ minQty: 10, pricePerUnit: 290 }],
-      images: ["/fruits/chausa.jpg"], color: "#F59E0B",
+      basePrice: 275,
+      tiers: [{ minQty: 10, pricePerUnit: 265 }],
+      images: ["/fruits/dinga.jpg"], color: "#F59E0B",
     },
   ]},
   { category: "Citrus", items: [
