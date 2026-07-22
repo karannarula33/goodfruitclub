@@ -60,8 +60,8 @@ const FRUITS = [
       name: "New Zealand Apple",
       tagline: "Imported, firm, and genuinely sweet — the kind that actually crunches",
       unit: "kg", step: 0.5, min: 1,
-      basePrice: 440,
-      tiers: [{ minQty: 2.5, pricePerUnit: 410 }, { minQty: 5, pricePerUnit: 400 }],
+      basePrice: 450,
+      tiers: [{ minQty: 2.5, pricePerUnit: 419 }, { minQty: 5, pricePerUnit: 438 }],
       badge: "Premium", images: ["/fruits/apple.jpg"], color: "#DC2626",
     },
     {
@@ -171,6 +171,14 @@ const FRUITS = [
       basePrice: 500,
       tiers: [],
       badge: "Pre-Order", images: ["/fruits/muscatgrapes.jpg"], color: "#4D7C0F",
+    },
+    {
+      name: "Anaar (Pomegranate)",
+      tagline: "Deep red, juicy arils bursting with sweet-tart flavour",
+      unit: "kg", step: 0.5, min: 1,
+      basePrice: 450,
+      tiers: [],
+      images: ["/fruits/anaar.jpg"], color: "#BE123C",
     },
   ]},
 ];
