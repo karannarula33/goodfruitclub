@@ -385,7 +385,7 @@ function FruitCard({ item, qty, onQtyChange }) {
     <div style={{
       background: "#fff", borderRadius: 16, overflow: "hidden",
       boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.04)",
-      marginBottom: 20, maxWidth: 420, width: "100%",
+      marginBottom: 20, width: "100%",
     }}>
       <ImageCarousel images={item.images} color={item.color} badge={item.badge} />
 
@@ -491,14 +491,12 @@ function BottomSheet({ open, onClose, children }) {
         onClick={onClose}
         style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 200, backdropFilter: "blur(2px)" }}
       />
-      <div style={{
-        position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 201,
-        background: "#fff", borderRadius: "20px 20px 0 0",
-        maxHeight: "88vh", overflowY: "auto",
+      <div className="sheet-panel" style={{
+        zIndex: 201, background: "#fff", overflowY: "auto",
         boxShadow: "0 -8px 40px rgba(0,0,0,0.18)",
         WebkitOverflowScrolling: "touch",
       }}>
-        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
+        <div className="sheet-handle">
           <div style={{ width: 36, height: 4, borderRadius: 2, background: "#ddd" }} />
         </div>
         {children}
@@ -1009,7 +1007,7 @@ export default function GoodFruitClub() {
         borderBottom: scrolled ? `1px solid ${BRAND.green}15` : "none",
         transition: "all 0.3s",
       }}>
-        <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <img src="/logo.svg" alt="Good Fruit Club" style={{ height: 40, width: "auto" }} />
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <button
@@ -1037,36 +1035,40 @@ export default function GoodFruitClub() {
       </nav>
 
       {/* Hero */}
-      <header style={{ maxWidth: 480, margin: "0 auto", padding: "32px 20px 40px", textAlign: "center" }}>
-        <img src="/logo.svg" alt="Good Fruit Club" style={{ height: 250, width: "auto", marginBottom: 24 }} />
-        <h1 style={{
-          fontFamily: "'DM Serif Display', serif",
-          fontSize: "clamp(34px, 9vw, 48px)", fontWeight: 400,
-          color: BRAND.green, margin: "0 0 16px", lineHeight: 1.1,
-        }}>
-          Fresh finds,<br />delivered home
-        </h1>
-        <p style={{ fontSize: 16, color: BRAND.muted, maxWidth: 360, margin: "0 auto 28px", lineHeight: 1.65 }}>
-          Premium fruits, sourced fresh and delivered to your doorstep. Hand-picked with care, packed by our family, brought to yours.
-        </p>
-        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-          <a href="#menu" style={{
-            background: BRAND.green, color: "#fff", padding: "13px 28px",
-            borderRadius: 12, fontSize: 15, fontWeight: 600, textDecoration: "none",
-          }}>Today's Menu ↓</a>
-          <a href={`https://wa.me/${WA}?text=${encodeURIComponent("Hi! Tell me more about Good Fruit Club")}`} target="_blank" rel="noopener noreferrer" style={{
-            background: "transparent", color: BRAND.green, padding: "13px 28px",
-            borderRadius: 12, fontSize: 15, fontWeight: 600, textDecoration: "none",
-            border: `2px solid ${BRAND.green}`,
-          }}>WhatsApp Us</a>
+      <header className="container" style={{ paddingTop: 32, paddingBottom: 40 }}>
+        <div className="hero-content">
+          <img src="/logo.svg" alt="Good Fruit Club" />
+          <div className="hero-text">
+            <h1 style={{
+              fontFamily: "'DM Serif Display', serif",
+              fontSize: "clamp(34px, 9vw, 48px)", fontWeight: 400,
+              color: BRAND.green, margin: "0 0 16px", lineHeight: 1.1,
+            }}>
+              Fresh finds,<br />delivered home
+            </h1>
+            <p className="hero-blurb" style={{ fontSize: 16, color: BRAND.muted, lineHeight: 1.65 }}>
+              Premium fruits, sourced fresh and delivered to your doorstep. Hand-picked with care, packed by our family, brought to yours.
+            </p>
+            <div className="hero-cta" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <a href="#menu" style={{
+                background: BRAND.green, color: "#fff", padding: "13px 28px",
+                borderRadius: 12, fontSize: 15, fontWeight: 600, textDecoration: "none",
+              }}>Today's Menu ↓</a>
+              <a href={`https://wa.me/${WA}?text=${encodeURIComponent("Hi! Tell me more about Good Fruit Club")}`} target="_blank" rel="noopener noreferrer" style={{
+                background: "transparent", color: BRAND.green, padding: "13px 28px",
+                borderRadius: 12, fontSize: 15, fontWeight: 600, textDecoration: "none",
+                border: `2px solid ${BRAND.green}`,
+              }}>WhatsApp Us</a>
+            </div>
+          </div>
         </div>
       </header>
 
       {/* How it works */}
-      <section style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px 40px" }}>
-        <div style={{
+      <section className="container" style={{ paddingBottom: 40 }}>
+        <div className="how-grid" style={{
           background: BRAND.green, borderRadius: 16, padding: "24px 20px",
-          display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16,
+          display: "grid", gap: 16,
         }}>
           {[
             { icon: "🛒", text: "Browse & add to cart" },
@@ -1083,7 +1085,7 @@ export default function GoodFruitClub() {
       </section>
 
       {/* Fruit Menu */}
-      <section id="menu" style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px 40px" }}>
+      <section id="menu" className="container" style={{ paddingBottom: 40 }}>
         <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 26, color: BRAND.green, margin: "0 0 4px" }}>Today's Fruits</h2>
         <p style={{ color: BRAND.muted, fontSize: 14, margin: "0 0 8px" }}>
           Before 10 AM → same day &nbsp;·&nbsp; After 10 AM → tomorrow morning
@@ -1096,7 +1098,7 @@ export default function GoodFruitClub() {
               textTransform: "uppercase", letterSpacing: 1.5, margin: "0 0 14px",
               paddingBottom: 8, borderBottom: `2px solid ${BRAND.green}18`,
             }}>{cat.category}</h3>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+            <div className="fruit-grid">
               {cat.items.map((item, ii) => (
                 <FruitCard
                   key={ii}
@@ -1111,8 +1113,8 @@ export default function GoodFruitClub() {
       </section>
 
       {/* Our Story */}
-      <section style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px 40px" }}>
-        <div style={{ background: BRAND.green, borderRadius: 16, padding: "32px 24px", color: "#fff" }}>
+      <section className="container" style={{ paddingBottom: 40 }}>
+        <div style={{ background: BRAND.green, borderRadius: 16, padding: "32px 24px", color: "#fff", maxWidth: 640, margin: "0 auto" }}>
           <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, margin: "0 0 14px", fontWeight: 400 }}>Our Story</h2>
           <p style={{ fontSize: 14.5, lineHeight: 1.75, margin: "0 0 12px", opacity: 0.9 }}>
             For over 30 years, our family has had a knack for finding the best fruits — knowing exactly what to pick, where to look, and what's truly worth bringing home.
@@ -1127,10 +1129,11 @@ export default function GoodFruitClub() {
       </section>
 
       {/* Feedback CTA */}
-      <section id="feedback" style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px 40px" }}>
+      <section id="feedback" className="container" style={{ paddingBottom: 40 }}>
         <div style={{
           background: "#fff", borderRadius: 16, padding: "24px 20px", textAlign: "center",
           boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.04)",
+          maxWidth: 480, margin: "0 auto",
         }}>
           <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: BRAND.green, margin: "0 0 8px", fontWeight: 400 }}>
             Share Your Feedback
