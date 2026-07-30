@@ -709,7 +709,7 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
   );
 }
 
-function FeedbackSection() {
+function FeedbackSection({ onClose }) {
   const todayStr = () => new Date().toISOString().slice(0, 10);
   const [form, setForm] = useState({ name: "", date: todayStr(), orderId: "", item: "", details: "" });
   const [file, setFile] = useState(null);
@@ -806,18 +806,15 @@ function FeedbackSection() {
   const labelStyle = { display: "block", fontSize: 13, fontWeight: 600, color: BRAND.text, marginBottom: 6 };
 
   return (
-    <section id="feedback" style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px 40px" }}>
-      <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 26, color: BRAND.green, margin: "0 0 4px" }}>
+    <div style={{ padding: "12px 20px 40px" }}>
+      <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: BRAND.green, margin: "0 0 4px" }}>
         Share Your Feedback
       </h2>
       <p style={{ color: BRAND.muted, fontSize: 14, margin: "0 0 20px" }}>
         Tell us how your order went — good or bad, we read every word.
       </p>
 
-      <div style={{
-        background: "#fff", borderRadius: 16, padding: "22px 20px",
-        boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.04)",
-      }}>
+      <div>
         {status === "success" ? (
           <div style={{ textAlign: "center", padding: "24px 0" }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>🙏</div>
@@ -952,7 +949,7 @@ function FeedbackSection() {
           </>
         )}
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -964,6 +961,7 @@ export default function GoodFruitClub() {
   });
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 50);
@@ -1014,9 +1012,14 @@ export default function GoodFruitClub() {
         <div style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <img src="/logo.svg" alt="Good Fruit Club" style={{ height: 40, width: "auto" }} />
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <a href="#feedback" style={{
-              color: BRAND.green, fontSize: 13, fontWeight: 600, textDecoration: "none",
-            }}>Feedback</a>
+            <button
+              onClick={() => setFeedbackOpen(true)}
+              style={{
+                background: "none", border: "none", cursor: "pointer", padding: 0,
+                color: BRAND.green, fontSize: 13, fontWeight: 600, textDecoration: "none",
+                fontFamily: "inherit",
+              }}
+            >Feedback</button>
             {cart.length > 0 && (
               <button
                 onClick={() => setCartOpen(true)}
@@ -1123,8 +1126,31 @@ export default function GoodFruitClub() {
         </div>
       </section>
 
-      {/* Feedback */}
-      <FeedbackSection />
+      {/* Feedback CTA */}
+      <section id="feedback" style={{ maxWidth: 480, margin: "0 auto", padding: "0 20px 40px" }}>
+        <div style={{
+          background: "#fff", borderRadius: 16, padding: "24px 20px", textAlign: "center",
+          boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.04)",
+        }}>
+          <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: BRAND.green, margin: "0 0 8px", fontWeight: 400 }}>
+            Share Your Feedback
+          </h2>
+          <p style={{ color: BRAND.muted, fontSize: 14, margin: "0 0 20px", lineHeight: 1.6 }}>
+            Tell us how your order went — good or bad, we read every word.
+          </p>
+          <button
+            onClick={() => setFeedbackOpen(true)}
+            style={{
+              background: BRAND.green, color: "#fff", padding: "12px 28px",
+              borderRadius: 10, fontSize: 15, fontWeight: 600, border: "none", cursor: "pointer",
+            }}
+          >Share Feedback</button>
+        </div>
+      </section>
+
+      <BottomSheet open={feedbackOpen} onClose={() => setFeedbackOpen(false)}>
+        <FeedbackSection onClose={() => setFeedbackOpen(false)} />
+      </BottomSheet>
 
       {/* Cart Bar */}
       <CartBar cart={cart} total={cartTotal} onOpen={() => setCartOpen(true)} />
