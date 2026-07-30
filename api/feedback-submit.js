@@ -8,11 +8,7 @@ function escapeHtml(str) {
   return str.replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
 }
 
-export default async function handler(request) {
-  if (request.method !== 'POST') {
-    return Response.json({ error: 'Method not allowed' }, { status: 405 });
-  }
-
+export async function POST(request) {
   let data;
   try {
     data = await request.json();
