@@ -16,6 +16,7 @@ import OrdersPage from "./OrdersPage.jsx";
 import AdminPage from "./AdminPage.jsx";
 import { BRAND } from "./theme.js";
 import { useHashRoute, navigate, saveOrder } from "./router.js";
+import { payWithRazorpay } from "./payment.js";
 
 
 
@@ -371,9 +372,10 @@ function CartSheet({ open, onClose, cart, onQtyChange, onCheckout }) {
 }
 
 function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
-  const [form, setForm] = useState({ name: "", phone: "", address: "", email: "", payment: "UPI" });
+  const [form, setForm] = useState({ name: "", phone: "", address: "", email: "", payment: "ONLINE" });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const cartTotal = computeOrder(cart).total;
 
   function set(key, val) {
     setForm(f => ({ ...f, [key]: val }));
@@ -415,16 +417,29 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
       // ordering never breaks even if the backend is down.
     }
 
-    setSubmitting(false);
-    openWhatsApp(order);
+    if (!order) {
+      // Couldn't record the order; keep the legacy WhatsApp-only flow.
+      setSubmitting(false);
+      openWhatsApp(null);
+      onOrderPlaced();
+      return;
+    }
 
-    if (order) {
-      saveOrder({ token: order.token, orderNo: order.orderNo, total: order.total });
+    saveOrder({ token: order.token, orderNo: order.orderNo, total: order.total });
+
+    if (form.payment === "ONLINE") {
+      // Open Razorpay. The order is already saved, so regardless of the payment
+      // outcome we clear the cart and send the customer to their tracking page
+      // (where an unpaid online order can be retried).
+      const finish = () => { onOrderPlaced(); navigate(`#/order/${order.token}`); };
+      payWithRazorpay(order.token, { onSuccess: finish, onDismiss: finish, onError: finish });
+      setSubmitting(false);
+    } else {
+      // Cash on Delivery — keep the WhatsApp handoff, then go to tracking.
+      setSubmitting(false);
+      openWhatsApp(order);
       onOrderPlaced();
       navigate(`#/order/${order.token}`);
-    } else {
-      // Couldn't record the order; keep the legacy flow (cart clears, WhatsApp sent).
-      onOrderPlaced();
     }
   }
 
@@ -495,7 +510,7 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
         <div style={{ marginBottom: 28 }}>
           <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: BRAND.text, marginBottom: 8 }}>Payment Mode</label>
           <div style={{ display: "flex", gap: 10 }}>
-            {[{ id: "UPI", label: "📱 UPI" }, { id: "COD", label: "💵 Cash on Delivery" }].map(({ id, label }) => (
+            {[{ id: "ONLINE", label: "💳 Pay Online" }, { id: "COD", label: "💵 Cash on Delivery" }].map(({ id, label }) => (
               <button
                 key={id}
                 onClick={() => set("payment", id)}
@@ -509,6 +524,11 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
               >{label}</button>
             ))}
           </div>
+          {form.payment === "ONLINE" && (
+            <p style={{ fontSize: 12, color: BRAND.muted, margin: "8px 2px 0" }}>
+              Secure UPI, cards & netbanking via Razorpay.
+            </p>
+          )}
         </div>
 
         <button
@@ -522,8 +542,12 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
             boxShadow: `0 4px 16px ${BRAND.green}44`,
           }}
         >
-          {WA_SVG}
-          {submitting ? "Placing order…" : "Place Order on WhatsApp"}
+          {form.payment === "COD" && WA_SVG}
+          {submitting
+            ? "Placing order…"
+            : form.payment === "ONLINE"
+              ? `Pay ${formatPrice(cartTotal)} securely`
+              : "Place Order on WhatsApp"}
         </button>
       </div>
     </BottomSheet>

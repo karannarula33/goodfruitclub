@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { formatPrice, formatQty } from "../lib/catalog.js";
-import { BRAND, STATUS_LABEL } from "./theme.js";
+import { BRAND, STATUS_LABEL, PAYMENT_LABEL } from "./theme.js";
 import { navigate } from "./router.js";
 
 const SECRET_KEY = "gfc-admin-secret";
@@ -125,7 +125,16 @@ export default function AdminPage() {
               <span style={{ fontWeight: 700, color: BRAND.green }}>{formatPrice(o.total)}</span>
             </div>
             <div style={{ fontSize: 13, color: BRAND.text, marginBottom: 2 }}>
-              {o.name} · {o.phone} · {o.paymentMode === "COD" ? "COD" : "UPI"}
+              {o.name} · {o.phone}
+            </div>
+            <div style={{ fontSize: 12.5, marginBottom: 6 }}>
+              <span style={{ color: BRAND.muted }}>{PAYMENT_LABEL[o.paymentMode] || o.paymentMode} · </span>
+              <span style={{
+                fontWeight: 700,
+                color: o.paymentStatus === "paid" ? BRAND.green : (o.paymentMode === "ONLINE" ? "#B91C1C" : BRAND.muted),
+              }}>
+                {o.paymentStatus === "paid" ? "PAID" : (o.paymentMode === "ONLINE" ? "UNPAID" : "on delivery")}
+              </span>
             </div>
             <div style={{ fontSize: 12.5, color: BRAND.muted, marginBottom: 8 }}>{o.address}</div>
             <div style={{ fontSize: 12.5, color: BRAND.muted, marginBottom: 10 }}>

@@ -14,6 +14,12 @@ function inr(n) {
   return `₹${Math.round(n).toLocaleString('en-IN')}`;
 }
 
+function paymentLabel(mode) {
+  if (mode === 'COD') return 'Cash on Delivery';
+  if (mode === 'ONLINE') return 'Online (Razorpay)';
+  return 'UPI';
+}
+
 function lineRows(order) {
   return order.items
     .map((l) => `<tr>
@@ -29,7 +35,7 @@ function ownerEmailHtml(order, trackUrl) {
     <h2>New order ${escapeHtml(order.order_no)}</h2>
     <table style="border-collapse:collapse;font-size:14px">${lineRows({ items: order.items })}</table>
     <p><strong>Total: ${inr(order.total)}</strong></p>
-    <p><strong>Payment:</strong> ${order.payment_mode === 'COD' ? 'Cash on Delivery' : 'UPI'} (${escapeHtml(order.payment_status)})</p>
+    <p><strong>Payment:</strong> ${paymentLabel(order.payment_mode)} (${escapeHtml(order.payment_status)})</p>
     <hr/>
     <p><strong>Name:</strong> ${escapeHtml(order.customer_name)}<br/>
        <strong>Phone:</strong> ${escapeHtml(order.phone)}<br/>
@@ -42,7 +48,7 @@ function customerEmailHtml(order, trackUrl) {
     <h2>Thanks for your order, ${escapeHtml(order.customer_name)}! 🍊</h2>
     <p>We've received order <strong>${escapeHtml(order.order_no)}</strong> and will start sourcing fresh for you.</p>
     <table style="border-collapse:collapse;font-size:14px">${lineRows({ items: order.items })}</table>
-    <p><strong>Total: ${inr(order.total)}</strong> · ${order.payment_mode === 'COD' ? 'Cash on Delivery' : 'UPI'}</p>
+    <p><strong>Total: ${inr(order.total)}</strong> · ${paymentLabel(order.payment_mode)}</p>
     <p>Track your order anytime: <a href="${trackUrl}">${trackUrl}</a></p>
     <p style="color:#6b6b5e;font-size:13px">Good Fruit Club · Gurgaon</p>`;
 }
@@ -59,7 +65,7 @@ export async function POST(request) {
   const phone = String(data.phone || '').trim();
   const address = String(data.address || '').trim();
   const email = String(data.email || '').trim();
-  const paymentMode = data.payment === 'UPI' ? 'UPI' : 'COD';
+  const paymentMode = ['ONLINE', 'UPI', 'COD'].includes(data.payment) ? data.payment : 'COD';
 
   if (!name) return Response.json({ error: 'Name is required' }, { status: 400 });
   if (!/^\d{10}$/.test(phone)) return Response.json({ error: 'Valid 10-digit phone is required' }, { status: 400 });

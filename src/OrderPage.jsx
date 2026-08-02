@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { formatPrice, formatQty } from "../lib/catalog.js";
-import { BRAND, FULFILMENT_STEPS, STATUS_LABEL } from "./theme.js";
+import { BRAND, FULFILMENT_STEPS, STATUS_LABEL, PAYMENT_LABEL } from "./theme.js";
 import { navigate } from "./router.js";
+import { payWithRazorpay } from "./payment.js";
 
 function StatusTimeline({ status }) {
   if (status === "cancelled") {
@@ -65,26 +66,30 @@ function StatusTimeline({ status }) {
 
 export default function OrderPage({ token }) {
   const [state, setState] = useState({ status: "loading", order: null, error: "" });
+  const [paying, setPaying] = useState(false);
+
+  const load = useCallback(async () => {
+    try {
+      const res = await fetch(`/api/order?token=${encodeURIComponent(token)}`);
+      if (res.status === 404) { setState({ status: "notfound", order: null, error: "" }); return; }
+      if (!res.ok) throw new Error("Failed");
+      const order = await res.json();
+      setState({ status: "ok", order, error: "" });
+    } catch {
+      setState({ status: "error", order: null, error: "Could not load this order." });
+    }
+  }, [token]);
 
   useEffect(() => {
-    let alive = true;
     setState({ status: "loading", order: null, error: "" });
-    fetch(`/api/order?token=${encodeURIComponent(token)}`)
-      .then(async (res) => {
-        if (!alive) return;
-        if (res.status === 404) {
-          setState({ status: "notfound", order: null, error: "" });
-          return;
-        }
-        if (!res.ok) throw new Error("Failed");
-        const order = await res.json();
-        if (alive) setState({ status: "ok", order, error: "" });
-      })
-      .catch(() => {
-        if (alive) setState({ status: "error", order: null, error: "Could not load this order." });
-      });
-    return () => { alive = false; };
-  }, [token]);
+    load();
+  }, [load]);
+
+  function handlePayNow() {
+    setPaying(true);
+    const done = () => { setPaying(false); load(); };
+    payWithRazorpay(token, { onSuccess: done, onDismiss: done, onError: done });
+  }
 
   const wrap = {
     fontFamily: "'DM Sans', 'Segoe UI', sans-serif",
@@ -181,9 +186,25 @@ export default function OrderPage({ token }) {
             <span style={{ fontWeight: 800, fontSize: 20, color: BRAND.green }}>{formatPrice(o.total)}</span>
           </div>
           <div style={{ fontSize: 12.5, color: BRAND.muted, marginTop: 8 }}>
-            Payment: {o.paymentMode === "COD" ? "Cash on Delivery" : "UPI"}
-            {o.paymentStatus === "paid" ? " · Paid" : ""}
+            Payment: {PAYMENT_LABEL[o.paymentMode] || o.paymentMode}
+            {o.paymentStatus === "paid"
+              ? <span style={{ color: BRAND.green, fontWeight: 700 }}> · Paid ✓</span>
+              : o.paymentMode === "ONLINE" ? " · Payment pending" : ""}
           </div>
+
+          {o.paymentMode === "ONLINE" && o.paymentStatus !== "paid" && o.fulfilmentStatus !== "cancelled" && (
+            <button
+              onClick={handlePayNow}
+              disabled={paying}
+              style={{
+                width: "100%", marginTop: 14, padding: "13px", background: BRAND.green, color: "#fff",
+                border: "none", borderRadius: 10, fontSize: 15, fontWeight: 600,
+                cursor: paying ? "default" : "pointer", opacity: paying ? 0.7 : 1,
+              }}
+            >
+              {paying ? "Opening payment…" : `Pay ${formatPrice(o.total)} now`}
+            </button>
+          )}
         </div>
 
         <div style={card}>

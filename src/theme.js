@@ -17,6 +17,12 @@ export const FULFILMENT_STEPS = [
   { id: "delivered", label: "Delivered", icon: "🚪" },
 ];
 
+export const PAYMENT_LABEL = {
+  COD: "Cash on Delivery",
+  ONLINE: "Online (Razorpay)",
+  UPI: "UPI",
+};
+
 export const STATUS_LABEL = {
   received: "Order received",
   sourcing: "Sourcing fresh",
