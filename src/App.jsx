@@ -1,253 +1,28 @@
 import { useState, useEffect, useRef } from "react";
 import { upload } from "@vercel/blob/client";
+import {
+  FRUITS,
+  WA,
+  findItem,
+  getPricePerUnit,
+  getNextNudge,
+  formatQty,
+  formatPrice,
+  formatRate,
+  computeOrder,
+} from "../lib/catalog.js";
+import OrderPage from "./OrderPage.jsx";
+import OrdersPage from "./OrdersPage.jsx";
+import AdminPage from "./AdminPage.jsx";
+import { BRAND } from "./theme.js";
+import { useHashRoute, navigate, saveOrder } from "./router.js";
 
-const BRAND = {
-  green: "#1B4332",
-  greenLight: "#2D6A4F",
-  greenDark: "#0F2A1D",
-  cream: "#FFFFFF",
-  warm: "#F5F0E6",
-  text: "#1a1a1a",
-  muted: "#6b6b5e",
-};
 
-const FRUITS = [
-  { category: "Mangoes", items: [
-    {
-      name: "Chausa Mango",
-      tagline: "Thin-skinned, silky smooth, and intensely sweet — one of the finest mangoes of the season",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 295,
-      tiers: [{ minQty: 10, pricePerUnit: 290 }],
-      images: ["/fruits/chausa.jpg"], color: "#F59E0B",
-    },
-    {
-      name: "Banarsi Langda",
-      tagline: "The Banarsi classic — tangy-sweet with a distinctive green skin even at full ripeness",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 225,
-      tiers: [{ minQty: 10, pricePerUnit: 210 }],
-      images: ["/fruits/langda.jpg"], color: "#84CC16",
-    },
-  ]},
-  { category: "Citrus", items: [
-    {
-      name: "Malta Orange",
-      tagline: "Juice-heavy, fragrant, and full — not the dry kind you get at stores",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 280,
-      tiers: [{ minQty: 2.5, pricePerUnit: 264 }],
-      images: ["/fruits/malta.jpg"], color: "#F97316",
-    },
-    {
-      name: "Mandarin Orange",
-      tagline: "Easy to peel, naturally sweet, almost zero acidity",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 300,
-      tiers: [{ minQty: 5, pricePerUnit: 280 }],
-      images: ["/fruits/mandarin.jpg"], color: "#EA580C",
-    },
-  ]},
-  { category: "Apples & Pears", items: [
-    {
-      name: "New Zealand Apple",
-      tagline: "Imported, firm, and genuinely sweet — the kind that actually crunches",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 460,
-      tiers: [{ minQty: 5, pricePerUnit: 440 }],
-      badge: "Premium", images: ["/fruits/apple.jpg"], color: "#DC2626",
-    },
-    {
-      name: "Pear",
-      tagline: "Smooth, grain-free white flesh — perfectly ripe, not rock-hard",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 370,
-      tiers: [],
-      images: ["/fruits/pear.jpg"], color: "#84CC16",
-    },
-  ]},
-  { category: "Seasonal Favourites", items: [
-{
-      name: "Afghan Cherry",
-      tagline: "Plump, dark, and intensely sweet — Afghan cherries are in a league of their own",
-      unit: "box", step: 1, min: 1,
-      basePrice: 750,
-      tiers: [],
-      badge: "New", images: ["/fruits/afghancherry.jpg"], color: "#BE123C",
-    },
-    {
-      name: "Afghan Khurmani (Apricot)",
-      tagline: "Sun-ripened Afghan apricots — golden-orange, honeyed, and richly aromatic (700g box)",
-      unit: "box", step: 1, min: 1,
-      basePrice: 680,
-      tiers: [],
-      images: ["/fruits/afghankhurmani.jpeg"], color: "#F59E0B",
-    },
-    {
-      name: "Jamun",
-      tagline: "Sweet-tart bite that just means summer. Plump, deep purple (400gm box)",
-      unit: "box", step: 1, min: 1,
-      basePrice: 350,
-      tiers: [{ minQty: 3, pricePerUnit: 330 }],
-      images: ["/fruits/jamun.jpg"], color: "#7C3AED",
-    },
-    {
-      name: "Kashmir Plums",
-      tagline: "Mountain-grown and deep red — jammy inside, sweet with a pleasant tartness",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 390,
-      tiers: [],
-      images: ["/fruits/kashmirplums.jpg"], color: "#9333EA",
-    },
-    {
-      name: "Mariposa Plums",
-      tagline: "Glossy maroon skin, blood-red flesh — intensely juicy and sweet with a pleasantly tart bite",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 420,
-      tiers: [],
-      images: ["/fruits/mariposaplum.jpg"], color: "#9333EA",
-    },
-  ]},
-  { category: "Exotics & Everyday", items: [
-    {
-      name: "Hass Avocado",
-      tagline: "Creamy, ripe, ready to eat — for toast, salads, or just with salt and lime",
-      unit: "pc", step: 1, min: 2,
-      basePrice: 160,
-      tiers: [],
-      images: ["/fruits/avocado.jpg"], color: "#166534",
-    },
-    {
-      name: "Dragon Fruit",
-      tagline: "Mild, refreshing, with a subtle kiwi-like sweetness",
-      unit: "pc", step: 1, min: 2,
-      basePrice: 100,
-      tiers: [],
-      images: ["/fruits/dragonfruit.jpg"], color: "#DB2777",
-    },
-    {
-      name: "Red Dragon Fruit",
-      tagline: "Vivid crimson flesh, sweeter and juicier than the white variety",
-      unit: "pc", step: 1, min: 2,
-      basePrice: 130,
-      tiers: [],
-      images: ["/fruits/Reddragonfruit.jpg"], color: "#BE185D",
-    },
-    {
-      name: "Golden Kiwi",
-      tagline: "Sweet, tropical, and smooth — golden flesh with a hint of mango",
-      unit: "box", step: 1, min: 1,
-      basePrice: 500,
-      tiers: [],
-      images: ["/fruits/goldenkiwi.jpg"], color: "#EAB308",
-    },
-    {
-      name: "Green Kiwi",
-      tagline: "Tangy-sweet and juicy — slice in half and scoop with a spoon",
-      unit: "box", step: 1, min: 1,
-      basePrice: 480,
-      tiers: [],
-      images: ["/fruits/greenkiwi.jpg"], color: "#65A30D",
-    },
-    {
-      name: "Papaya",
-      tagline: "Sweet, soft, custard-like — picked at the right ripeness",
-      unit: "kg", step: 1, min: 1,
-      basePrice: 150,
-      tiers: [],
-      images: ["/fruits/papaya.jpg"], color: "#EA580C",
-    },
-    {
-      name: "Red Globe Grapes",
-      tagline: "Large, firm, and deeply sweet — the real thing, not the watery supermarket kind",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 520,
-      tiers: [{ minQty: 2, pricePerUnit: 500 }],
-      images: ["/fruits/redglobegrapes.jpg"], color: "#BE123C",
-    },
-    {
-      name: "Muscat Grapes",
-      tagline: "The aromatic classic — exceptionally sweet with a firm, seedless bite and absolutely zero tartness (500g box)",
-      unit: "box", step: 1, min: 1,
-      basePrice: 480,
-      tiers: [],
-      badge: "Pre-Order", images: ["/fruits/muscatgrapes.jpg"], color: "#4D7C0F",
-    },
-    {
-      name: "Anaar (Pomegranate)",
-      tagline: "Deep red, juicy arils bursting with sweet-tart flavour",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 450,
-      tiers: [],
-      images: ["/fruits/anaar.jpg"], color: "#BE123C",
-    },
-    {
-      name: "Sharda (Sunmelon)",
-      tagline: "Golden-skinned muskmelon — fragrant, juicy, and honey-sweet",
-      unit: "kg", step: 0.5, min: 1,
-      basePrice: 190,
-      tiers: [],
-      images: ["/fruits/sunmelon.JPG"], color: "#EAB308",
-    },
-    {
-      name: "Jumbo Blueberry",
-      tagline: "Extra-large, plump blueberries — bursting with flavour (125g box)",
-      unit: "box", step: 1, min: 1,
-      basePrice: 330,
-      tiers: [],
-      images: ["/fruits/jumboblueberry.JPG"], color: "#3730A3",
-    },
-  ]},
-];
-
-const WA = "919911777333";
 
 const FEEDBACK_ITEMS = FRUITS.flatMap(cat => cat.items.map(item => item.name));
 
 const MAX_MEDIA_BYTES = 50 * 1024 * 1024;
 
-function findItem(name) {
-  for (const cat of FRUITS) {
-    for (const item of cat.items) {
-      if (item.name === name) return item;
-    }
-  }
-  return null;
-}
-
-function getPricePerUnit(item, qty) {
-  let rate = item.basePrice;
-  for (const tier of item.tiers) {
-    if (qty >= tier.minQty) rate = tier.pricePerUnit;
-  }
-  return rate;
-}
-
-function getNextNudge(item, qty) {
-  const currentRate = getPricePerUnit(item, qty);
-  for (const tier of item.tiers) {
-    if (qty < tier.minQty && tier.pricePerUnit < currentRate) {
-      return {
-        needed: Math.round((tier.minQty - qty) * 10) / 10,
-        rate: tier.pricePerUnit,
-      };
-    }
-  }
-  return null;
-}
-
-function formatQty(qty, unit) {
-  if (unit === "box") return `${qty} ${qty === 1 ? "box" : "boxes"}`;
-  return `${qty} ${unit}`;
-}
-
-function formatPrice(n) {
-  return `₹${Math.round(n).toLocaleString("en-IN")}`;
-}
-
-function formatRate(ppu) {
-  return Number.isInteger(ppu) ? `₹${ppu}` : `₹${ppu.toFixed(1)}`;
-}
 
 function buildWhatsAppMessage(cart, details) {
   const lines = cart.map(({ itemName, qty }) => {
@@ -596,8 +371,9 @@ function CartSheet({ open, onClose, cart, onQtyChange, onCheckout }) {
 }
 
 function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
-  const [form, setForm] = useState({ name: "", phone: "", address: "", payment: "UPI" });
+  const [form, setForm] = useState({ name: "", phone: "", address: "", email: "", payment: "UPI" });
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
 
   function set(key, val) {
     setForm(f => ({ ...f, [key]: val }));
@@ -612,12 +388,44 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
     return e;
   }
 
-  function handlePlaceOrder() {
+  function openWhatsApp(order) {
+    const base = buildWhatsAppMessage(cart, form);
+    const extra = order
+      ? `\n\nOrder No: ${order.orderNo}\nTrack: ${window.location.origin}/#/order/${order.token}`
+      : "";
+    window.open(`https://wa.me/${WA}?text=${encodeURIComponent(base + extra)}`, "_blank");
+  }
+
+  async function handlePlaceOrder() {
     const e = validate();
     if (Object.keys(e).length > 0) { setErrors(e); return; }
-    const msg = buildWhatsAppMessage(cart, form);
-    window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, "_blank");
-    onOrderPlaced();
+    if (submitting) return;
+    setSubmitting(true);
+
+    let order = null;
+    try {
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart, ...form }),
+      });
+      if (res.ok) order = await res.json();
+    } catch {
+      // Network/server failure — fall through to the WhatsApp-only fallback so
+      // ordering never breaks even if the backend is down.
+    }
+
+    setSubmitting(false);
+    openWhatsApp(order);
+
+    if (order) {
+      saveOrder({ token: order.token, orderNo: order.orderNo, total: order.total });
+      onOrderPlaced();
+      navigate(`#/order/${order.token}`);
+    } else {
+      // Couldn't record the order; keep the legacy flow (cart clears, WhatsApp sent).
+      onOrderPlaced();
+    }
   }
 
   const fieldStyle = (key) => ({
@@ -671,6 +479,19 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
           {errors.address && <div style={{ fontSize: 12, color: "#DC2626", marginTop: 4 }}>{errors.address}</div>}
         </div>
 
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: BRAND.text, marginBottom: 6 }}>
+            Email <span style={{ fontWeight: 400, color: BRAND.muted }}>(optional — for order confirmation)</span>
+          </label>
+          <input
+            type="email"
+            placeholder="you@example.com"
+            value={form.email}
+            onChange={e => set("email", e.target.value)}
+            style={fieldStyle("email")}
+          />
+        </div>
+
         <div style={{ marginBottom: 28 }}>
           <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: BRAND.text, marginBottom: 8 }}>Payment Mode</label>
           <div style={{ display: "flex", gap: 10 }}>
@@ -692,15 +513,17 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
 
         <button
           onClick={handlePlaceOrder}
+          disabled={submitting}
           style={{
             width: "100%", padding: "14px", background: BRAND.green, color: "#fff",
-            border: "none", borderRadius: 12, fontSize: 15, fontWeight: 600, cursor: "pointer",
+            border: "none", borderRadius: 12, fontSize: 15, fontWeight: 600,
+            cursor: submitting ? "default" : "pointer", opacity: submitting ? 0.7 : 1,
             display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
             boxShadow: `0 4px 16px ${BRAND.green}44`,
           }}
         >
           {WA_SVG}
-          Place Order on WhatsApp
+          {submitting ? "Placing order…" : "Place Order on WhatsApp"}
         </button>
       </div>
     </BottomSheet>
@@ -951,7 +774,7 @@ function FeedbackSection({ onClose }) {
   );
 }
 
-export default function GoodFruitClub() {
+function Storefront() {
   const [scrolled, setScrolled] = useState(false);
   const [cart, setCart] = useState(() => {
     try { return JSON.parse(localStorage.getItem("gfc-cart") || "[]"); }
@@ -1010,6 +833,14 @@ export default function GoodFruitClub() {
         <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <img src="/logo.svg" alt="Good Fruit Club" style={{ height: 40, width: "auto" }} />
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <button
+              onClick={() => navigate("#/orders")}
+              style={{
+                background: "none", border: "none", cursor: "pointer", padding: 0,
+                color: BRAND.green, fontSize: 13, fontWeight: 600, textDecoration: "none",
+                fontFamily: "inherit",
+              }}
+            >My Orders</button>
             <button
               onClick={() => setFeedbackOpen(true)}
               style={{
@@ -1194,4 +1025,15 @@ export default function GoodFruitClub() {
       </footer>
     </div>
   );
+}
+
+export default function App() {
+  const hash = useHashRoute();
+  const route = hash.replace(/^#/, "");
+
+  const orderMatch = route.match(/^\/order\/(.+)$/);
+  if (orderMatch) return <OrderPage token={decodeURIComponent(orderMatch[1])} />;
+  if (route === "/orders") return <OrdersPage />;
+  if (route === "/admin") return <AdminPage />;
+  return <Storefront />;
 }
