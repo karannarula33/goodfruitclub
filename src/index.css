@@ -12,6 +12,40 @@
   .container { max-width: 1140px; padding-left: 40px; padding-right: 40px; }
 }
 
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+.carousel-arrow:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+.carousel-arrow:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+.carousel-arrow-left { left: 8px; }
+.carousel-arrow-right { right: 8px; }
+
+@media (min-width: 768px) {
+  .carousel-arrow { width: 34px; height: 34px; font-size: 20px; }
+}
+
 .fruit-grid {
   display: flex;
   flex-direction: column;

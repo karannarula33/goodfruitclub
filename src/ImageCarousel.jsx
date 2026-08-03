@@ -4,6 +4,11 @@ import { BRAND } from "./theme.js";
 export default function ImageCarousel({ images, color, badge }) {
   const [current, setCurrent] = useState(0);
   const touchStartX = useRef(null);
+  const hasMultiple = images.length > 1;
+
+  function goTo(i) {
+    setCurrent(Math.max(0, Math.min(i, images.length - 1)));
+  }
 
   function handleTouchStart(e) {
     touchStartX.current = e.touches[0].clientX;
@@ -13,18 +18,26 @@ export default function ImageCarousel({ images, color, badge }) {
     if (touchStartX.current === null) return;
     const diff = touchStartX.current - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 40) {
-      if (diff > 0) setCurrent(c => Math.min(c + 1, images.length - 1));
-      else setCurrent(c => Math.max(c - 1, 0));
+      if (diff > 0) goTo(current + 1);
+      else goTo(current - 1);
     }
     touchStartX.current = null;
   }
 
+  function handleKeyDown(e) {
+    if (e.key === "ArrowRight") goTo(current + 1);
+    else if (e.key === "ArrowLeft") goTo(current - 1);
+  }
+
   return (
     <div
+      className="carousel-container"
+      tabIndex={hasMultiple ? 0 : undefined}
+      onKeyDown={hasMultiple ? handleKeyDown : undefined}
       style={{
         width: "100%", aspectRatio: "4/3", position: "relative",
         background: `linear-gradient(135deg, ${color}22, ${color}44)`,
-        overflow: "hidden",
+        overflow: "hidden", outline: "none",
       }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -55,7 +68,26 @@ export default function ImageCarousel({ images, color, badge }) {
         }}>{badge}</span>
       )}
 
-      {images.length > 1 && (
+      {hasMultiple && (
+        <>
+          <button
+            type="button"
+            aria-label="Previous image"
+            onClick={(e) => { e.stopPropagation(); goTo(current - 1); }}
+            disabled={current === 0}
+            className="carousel-arrow carousel-arrow-left"
+          >‹</button>
+          <button
+            type="button"
+            aria-label="Next image"
+            onClick={(e) => { e.stopPropagation(); goTo(current + 1); }}
+            disabled={current === images.length - 1}
+            className="carousel-arrow carousel-arrow-right"
+          >›</button>
+        </>
+      )}
+
+      {hasMultiple && (
         <div style={{
           position: "absolute", bottom: 10, left: 0, right: 0, zIndex: 1,
           display: "flex", justifyContent: "center", gap: 5,
@@ -63,7 +95,7 @@ export default function ImageCarousel({ images, color, badge }) {
           {images.map((_, i) => (
             <div
               key={i}
-              onClick={() => setCurrent(i)}
+              onClick={() => goTo(i)}
               style={{
                 height: 6, borderRadius: 3,
                 width: i === current ? 18 : 6,
