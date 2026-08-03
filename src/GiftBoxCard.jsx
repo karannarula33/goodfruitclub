@@ -33,9 +33,14 @@ export default function GiftBoxCard({ item, qty, onQtyChange }) {
         <h3 style={{ fontSize: 21, fontWeight: 700, color: BRAND.text, margin: "0 0 8px", fontFamily: "'DM Serif Display', serif" }}>
           {item.name}
         </h3>
-        <p style={{ fontSize: 13.5, color: BRAND.muted, margin: "0 0 14px", lineHeight: 1.55 }}>
-          <strong style={{ color: BRAND.text }}>Contains:</strong> {item.tagline}
+        <p style={{ fontSize: 13.5, color: BRAND.muted, margin: "0 0 10px", lineHeight: 1.55 }}>
+          {item.tagline}
         </p>
+        {item.contents && (
+          <p style={{ fontSize: 12.5, color: BRAND.muted, margin: "0 0 14px", lineHeight: 1.55 }}>
+            <strong style={{ color: BRAND.text }}>Contains:</strong> {item.contents}
+          </p>
+        )}
 
         <div style={{ marginBottom: 16 }}>
           <span style={{ fontSize: 22, fontWeight: 800, color: BRAND.green }}>{formatPrice(item.basePrice)}</span>
