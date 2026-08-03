@@ -888,12 +888,7 @@ function Storefront() {
             </p>
             <div className="giftbox-grid">
               {GIFT_BOXES.map((box) => (
-                <GiftBoxCard
-                  key={box.name}
-                  item={box}
-                  qty={getQty(box.name)}
-                  onQtyChange={(qty) => setQty(box, qty)}
-                />
+                <GiftBoxCard key={box.name} item={box} />
               ))}
             </div>
           </div>
