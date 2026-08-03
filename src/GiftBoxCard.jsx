@@ -14,11 +14,15 @@ export default function GiftBoxCard({ item }) {
     <div style={{
       background: "#fff", borderRadius: 18, overflow: "hidden",
       boxShadow: "0 2px 8px rgba(0,0,0,0.08), 0 10px 30px rgba(0,0,0,0.06)",
-      marginBottom: 24, width: "100%",
+      width: "100%", height: "100%", boxSizing: "border-box",
+      display: "flex", flexDirection: "column",
     }}>
       <ImageCarousel images={item.images} color={item.color} badge={item.badge || "Gift Box"} />
 
-      <div style={{ padding: "20px 22px 22px" }}>
+      {/* flex:1 so this fills any leftover height once the grid row stretches
+          the card to match its tallest sibling; marginTop:"auto" on the CTA
+          below then pins it to the bottom regardless of text length. */}
+      <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: "1 1 auto" }}>
         <h3 style={{ fontSize: 21, fontWeight: 700, color: BRAND.text, margin: "0 0 8px", fontFamily: "'DM Serif Display', serif" }}>
           {item.name}
         </h3>
@@ -39,7 +43,7 @@ export default function GiftBoxCard({ item }) {
             display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
             width: "100%", padding: "13px", background: BRAND.green, color: "#fff",
             border: "none", borderRadius: 10, fontSize: 15, fontWeight: 600,
-            textDecoration: "none", boxSizing: "border-box",
+            textDecoration: "none", boxSizing: "border-box", marginTop: "auto",
           }}
         >
           Enquire on WhatsApp →
