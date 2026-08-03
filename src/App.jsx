@@ -823,7 +823,12 @@ function Storefront() {
   }
 
   function setQty(item, qty) {
-    const q = Math.round(qty * 10) / 10;
+    let q = Math.round(qty * 10) / 10;
+    // A decrement step doesn't always land exactly on the item's minimum
+    // (e.g. min 2pc stepping by 1, or min 1kg stepping by 0.5kg) — treat
+    // anything that would dip below the minimum as "remove", not as a
+    // below-minimum quantity in the cart.
+    if (q > 0 && q < item.min) q = 0;
     setCart(prev => {
       if (q <= 0) return prev.filter(c => c.itemName !== item.name);
       const exists = prev.find(c => c.itemName === item.name);
