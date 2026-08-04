@@ -1,4 +1,4 @@
-import { WA } from "../lib/catalog.js";
+import { WA, slugify } from "../lib/catalog.js";
 import { BRAND } from "./theme.js";
 import ImageCarousel from "./ImageCarousel.jsx";
 
@@ -9,6 +9,7 @@ import ImageCarousel from "./ImageCarousel.jsx";
 export default function GiftBoxCard({ item }) {
   const message = `Hi! I'd like to know more about the "${item.name}" gift box.`;
   const href = `https://wa.me/${WA}?text=${encodeURIComponent(message)}`;
+  const productHref = `#/product/${slugify(item.name)}`;
 
   return (
     <div style={{
@@ -17,7 +18,9 @@ export default function GiftBoxCard({ item }) {
       width: "100%", height: "100%", boxSizing: "border-box",
       display: "flex", flexDirection: "column",
     }}>
-      <ImageCarousel images={item.images} color={item.color} badge={item.badge || "Gift Box"} />
+      <a href={productHref} style={{ display: "block", color: "inherit", textDecoration: "none" }}>
+        <ImageCarousel images={item.images} color={item.color} badge={item.badge || "Gift Box"} />
+      </a>
 
       {/* Boxes have wildly different amounts of copy (2-item vs 10-item
           contents lists), so equal card height can't rely on grid row
@@ -27,9 +30,11 @@ export default function GiftBoxCard({ item }) {
           the same height regardless of row position; flex:1 + marginTop:auto
           on the CTA then pins it to the bottom for any remaining slack. */}
       <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: "1 1 auto" }}>
-        <h3 style={{ fontSize: 21, fontWeight: 700, color: BRAND.text, margin: "0 0 8px", fontFamily: "'DM Serif Display', serif" }}>
-          {item.name}
-        </h3>
+        <a href={productHref} style={{ display: "block", color: "inherit", textDecoration: "none" }}>
+          <h3 style={{ fontSize: 21, fontWeight: 700, color: BRAND.text, margin: "0 0 8px", fontFamily: "'DM Serif Display', serif" }}>
+            {item.name}
+          </h3>
+        </a>
         <p style={{
           fontSize: 13.5, color: BRAND.muted, margin: "0 0 10px", lineHeight: 1.55,
           display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden",

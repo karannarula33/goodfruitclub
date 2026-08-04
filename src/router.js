@@ -23,6 +23,31 @@ export function navigate(to) {
   window.scrollTo(0, 0);
 }
 
+const CART_KEY = "gfc-cart";
+
+// Read the same cart the storefront persists to localStorage, so a product
+// page can add an item and hand off to "#/" with the cart already updated.
+export function getCart() {
+  try {
+    const arr = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+
+export function addToCart(item, qty) {
+  let q = Math.round(qty * 10) / 10;
+  if (q > 0 && q < item.min) q = item.min;
+  if (q <= 0) return;
+  const cart = getCart();
+  const existing = cart.find((c) => c.itemName === item.name);
+  const next = existing
+    ? cart.map((c) => (c.itemName === item.name ? { ...c, qty: q } : c))
+    : [...cart, { itemName: item.name, qty: q }];
+  localStorage.setItem(CART_KEY, JSON.stringify(next));
+}
+
 const SAVED_KEY = "gfc-orders";
 
 // Track the customer's own orders locally so they get a "My Orders" list

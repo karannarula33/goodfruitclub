@@ -95,7 +95,7 @@ export default function ImageCarousel({ images, color, badge }) {
           {images.map((_, i) => (
             <div
               key={i}
-              onClick={() => goTo(i)}
+              onClick={(e) => { e.stopPropagation(); e.preventDefault(); goTo(i); }}
               style={{
                 height: 6, borderRadius: 3,
                 width: i === current ? 18 : 6,

@@ -10,11 +10,13 @@ import {
   formatPrice,
   formatRate,
   computeOrder,
+  slugify,
 } from "../lib/catalog.js";
 import OrderPage from "./OrderPage.jsx";
 import OrdersPage from "./OrdersPage.jsx";
 import AdminPage from "./AdminPage.jsx";
 import FeedbackPage from "./FeedbackPage.jsx";
+import ProductPage from "./ProductPage.jsx";
 import { BRAND } from "./theme.js";
 import { useHashRoute, navigate, saveOrder } from "./router.js";
 import { payWithRazorpay } from "./payment.js";
@@ -76,16 +78,22 @@ function FruitCard({ item, qty, onQtyChange }) {
     >{label}</button>
   );
 
+  const productHref = `#/product/${slugify(item.name)}`;
+
   return (
     <div style={{
       background: "#fff", borderRadius: 16, overflow: "hidden",
       boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.04)",
       width: "100%",
     }}>
-      <ImageCarousel images={item.images} color={item.color} badge={item.badge} />
+      <a href={productHref} style={{ display: "block", color: "inherit", textDecoration: "none" }}>
+        <ImageCarousel images={item.images} color={item.color} badge={item.badge} />
+      </a>
 
       <div style={{ padding: "18px 20px 20px" }}>
-        <h3 style={{ fontSize: 20, fontWeight: 700, color: BRAND.text, margin: "0 0 6px", fontFamily: "'DM Serif Display', serif" }}>{item.name}</h3>
+        <a href={productHref} style={{ display: "block", color: "inherit", textDecoration: "none" }}>
+          <h3 style={{ fontSize: 20, fontWeight: 700, color: BRAND.text, margin: "0 0 6px", fontFamily: "'DM Serif Display', serif" }}>{item.name}</h3>
+        </a>
         <p style={{ fontSize: 13.5, color: BRAND.muted, margin: "0 0 14px", lineHeight: 1.5 }}>{item.tagline}</p>
 
         <div style={{ marginBottom: 14, fontSize: 14 }}>
@@ -754,6 +762,8 @@ export default function App() {
 
   const orderMatch = route.match(/^\/order\/(.+)$/);
   if (orderMatch) return <OrderPage token={decodeURIComponent(orderMatch[1])} />;
+  const productMatch = route.match(/^\/product\/(.+)$/);
+  if (productMatch) return <ProductPage slug={decodeURIComponent(productMatch[1])} />;
   if (route === "/orders") return <OrdersPage />;
   if (route === "/feedback") return <FeedbackPage />;
   if (route === "/admin") return <AdminPage />;
