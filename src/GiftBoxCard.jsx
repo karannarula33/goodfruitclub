@@ -19,18 +19,28 @@ export default function GiftBoxCard({ item }) {
     }}>
       <ImageCarousel images={item.images} color={item.color} badge={item.badge || "Gift Box"} />
 
-      {/* flex:1 so this fills any leftover height once the grid row stretches
-          the card to match its tallest sibling; marginTop:"auto" on the CTA
-          below then pins it to the bottom regardless of text length. */}
+      {/* Boxes have wildly different amounts of copy (2-item vs 10-item
+          contents lists), so equal card height can't rely on grid row
+          stretching alone — that only matches cards within the same row,
+          not across rows. The tagline/contents paragraphs below are
+          line-clamped to a fixed line count so every card's text block is
+          the same height regardless of row position; flex:1 + marginTop:auto
+          on the CTA then pins it to the bottom for any remaining slack. */}
       <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: "1 1 auto" }}>
         <h3 style={{ fontSize: 21, fontWeight: 700, color: BRAND.text, margin: "0 0 8px", fontFamily: "'DM Serif Display', serif" }}>
           {item.name}
         </h3>
-        <p style={{ fontSize: 13.5, color: BRAND.muted, margin: "0 0 10px", lineHeight: 1.55 }}>
+        <p style={{
+          fontSize: 13.5, color: BRAND.muted, margin: "0 0 10px", lineHeight: 1.55,
+          display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden",
+        }}>
           {item.tagline}
         </p>
         {item.contents && (
-          <p style={{ fontSize: 12.5, color: BRAND.muted, margin: "0 0 18px", lineHeight: 1.55 }}>
+          <p style={{
+            fontSize: 12.5, color: BRAND.muted, margin: "0 0 18px", lineHeight: 1.55,
+            display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden",
+          }}>
             <strong style={{ color: BRAND.text }}>Contains:</strong> {item.contents}
           </p>
         )}
