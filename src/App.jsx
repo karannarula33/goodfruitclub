@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Fragment } from "react";
 import { upload } from "@vercel/blob/client";
 import {
   FRUITS,
@@ -86,7 +86,7 @@ function FruitCard({ item, qty, onQtyChange }) {
     <div style={{
       background: "#fff", borderRadius: 16, overflow: "hidden",
       boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.04)",
-      marginBottom: 20, width: "100%",
+      width: "100%",
     }}>
       <ImageCarousel images={item.images} color={item.color} badge={item.badge} />
 
@@ -902,14 +902,10 @@ function Storefront() {
           Before 10 AM → same day &nbsp;·&nbsp; After 10 AM → tomorrow morning
         </p>
 
-        {FRUITS.map((cat, ci) => (
-          <div key={ci} style={{ marginTop: 28 }}>
-            <h3 style={{
-              fontSize: 15, fontWeight: 700, color: BRAND.green,
-              textTransform: "uppercase", letterSpacing: 1.5, margin: "0 0 14px",
-              paddingBottom: 8, borderBottom: `2px solid ${BRAND.green}18`,
-            }}>{cat.category}</h3>
-            <div className="fruit-grid">
+        <div className="fruit-grid">
+          {FRUITS.map((cat, ci) => (
+            <Fragment key={ci}>
+              <h3 className="category-heading">{cat.category}</h3>
               {cat.items.map((item, ii) => (
                 <FruitCard
                   key={ii}
@@ -918,9 +914,9 @@ function Storefront() {
                   onQtyChange={(qty) => setQty(item, qty)}
                 />
               ))}
-            </div>
-          </div>
-        ))}
+            </Fragment>
+          ))}
+        </div>
       </section>
 
       {/* Our Story */}
