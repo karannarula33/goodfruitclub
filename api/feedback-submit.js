@@ -26,7 +26,7 @@ export async function POST(request) {
   if (!name || !details) {
     return Response.json({ error: 'Name and details are required' }, { status: 400 });
   }
-  if (mediaUrl && !mediaUrl.startsWith('https://blob.vercel-storage.com/') && !mediaUrl.startsWith('https://public.blob.vercel-storage.com/')) {
+  if (mediaUrl && !/^https:\/\/[a-z0-9]+\.public\.blob\.vercel-storage\.com\//.test(mediaUrl)) {
     return Response.json({ error: 'Invalid media URL' }, { status: 400 });
   }
 
