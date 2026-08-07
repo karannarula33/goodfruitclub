@@ -5,6 +5,30 @@ import { BRAND } from "./theme.js";
 
 const FEEDBACK_ITEMS = FRUITS.flatMap(cat => cat.items.map(item => item.name));
 const MAX_MEDIA_BYTES = 50 * 1024 * 1024;
+const MULTIPART_THRESHOLD_BYTES = 10 * 1024 * 1024;
+const COMPRESS_MAX_DIMENSION = 1920;
+const COMPRESS_QUALITY = 0.82;
+
+async function compressImage(file) {
+  if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return file;
+  const bitmap = await createImageBitmap(file).catch(() => null);
+  if (!bitmap) return file;
+
+  const scale = Math.min(1, COMPRESS_MAX_DIMENSION / Math.max(bitmap.width, bitmap.height));
+  const width = Math.round(bitmap.width * scale);
+  const height = Math.round(bitmap.height * scale);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  canvas.getContext("2d").drawImage(bitmap, 0, 0, width, height);
+  bitmap.close();
+
+  const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", COMPRESS_QUALITY));
+  if (!blob || blob.size >= file.size) return file;
+
+  return new File([blob], file.name.replace(/\.\w+$/, ".jpg"), { type: "image/jpeg" });
+}
 
 export default function FeedbackSection() {
   const todayStr = () => new Date().toISOString().slice(0, 10);
@@ -22,7 +46,7 @@ export default function FeedbackSection() {
     setErrors(e => ({ ...e, [key]: "" }));
   }
 
-  function handleFileChange(e) {
+  async function handleFileChange(e) {
     const f = e.target.files?.[0];
     if (!f) return;
     if (f.size > MAX_MEDIA_BYTES) {
@@ -30,8 +54,10 @@ export default function FeedbackSection() {
       return;
     }
     setErrors(er => ({ ...er, file: "" }));
-    setFile(f);
-    setPreview({ url: URL.createObjectURL(f), type: f.type.startsWith("video") ? "video" : "image", name: f.name });
+    const isVideo = f.type.startsWith("video");
+    const finalFile = isVideo ? f : await compressImage(f);
+    setFile(finalFile);
+    setPreview({ url: URL.createObjectURL(finalFile), type: isVideo ? "video" : "image", name: finalFile.name });
   }
 
   function removeFile() {
@@ -63,7 +89,7 @@ export default function FeedbackSection() {
         const blob = await upload(file.name, file, {
           access: "public",
           handleUploadUrl: "/api/feedback-upload",
-          multipart: true,
+          multipart: file.size > MULTIPART_THRESHOLD_BYTES,
           onUploadProgress: ({ percentage }) => setProgress(percentage),
         });
         mediaUrl = blob.url;
