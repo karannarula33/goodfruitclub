@@ -17,6 +17,8 @@ function publicView(order) {
     name: order.customer_name,
     phone: order.phone,
     address: order.address,
+    lat: order.lat,
+    lng: order.lng,
     paymentMode: order.payment_mode,
     paymentStatus: order.payment_status,
     fulfilmentStatus: order.fulfilment_status,

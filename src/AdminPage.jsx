@@ -136,7 +136,16 @@ export default function AdminPage() {
                 {o.paymentStatus === "paid" ? "PAID" : (o.paymentMode === "ONLINE" ? "UNPAID" : "on delivery")}
               </span>
             </div>
-            <div style={{ fontSize: 12.5, color: BRAND.muted, marginBottom: 8 }}>{o.address}</div>
+            <div style={{ fontSize: 12.5, color: BRAND.muted, marginBottom: 8 }}>
+              {o.address}
+              {o.lat != null && o.lng != null && (
+                <> · <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${o.lat},${o.lng}`}
+                  target="_blank" rel="noreferrer"
+                  style={{ color: BRAND.green, fontWeight: 600 }}
+                >map →</a></>
+              )}
+            </div>
             <div style={{ fontSize: 12.5, color: BRAND.muted, marginBottom: 10 }}>
               {o.items.map((l) => `${l.itemName} (${formatQty(l.qty, l.unit)})`).join(", ")}
             </div>

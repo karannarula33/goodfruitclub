@@ -23,6 +23,8 @@ import { useHashRoute, navigate, saveOrder } from "./router.js";
 import { payWithRazorpay } from "./payment.js";
 import ImageCarousel from "./ImageCarousel.jsx";
 import GiftBoxCard from "./GiftBoxCard.jsx";
+import LocationPicker from "./LocationPicker.jsx";
+import BottomSheet from "./BottomSheet.jsx";
 
 
 function buildWhatsAppMessage(cart, details) {
@@ -49,6 +51,9 @@ function buildWhatsAppMessage(cart, details) {
     `Name: ${details.name}`,
     `Phone: ${details.phone}`,
     `Address: ${details.address}`,
+    ...(details.lat != null && details.lng != null
+      ? [`Map: https://www.google.com/maps/search/?api=1&query=${details.lat},${details.lng}`]
+      : []),
     `Payment: ${details.payment === "COD" ? "Cash on Delivery" : "UPI"}`,
   ].join("\n");
 }
@@ -182,34 +187,6 @@ function CartBar({ cart, total, onOpen }) {
   );
 }
 
-function BottomSheet({ open, onClose, children }) {
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [open]);
-
-  if (!open) return null;
-
-  return (
-    <>
-      <div
-        onClick={onClose}
-        style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 200, backdropFilter: "blur(2px)" }}
-      />
-      <div className="sheet-panel" style={{
-        zIndex: 201, background: "#fff", overflowY: "auto",
-        boxShadow: "0 -8px 40px rgba(0,0,0,0.18)",
-        WebkitOverflowScrolling: "touch",
-      }}>
-        <div className="sheet-handle">
-          <div style={{ width: 36, height: 4, borderRadius: 2, background: "#ddd" }} />
-        </div>
-        {children}
-      </div>
-    </>
-  );
-}
-
 function CartSheet({ open, onClose, cart, onQtyChange, onCheckout }) {
   const total = cart.reduce((sum, { itemName, qty }) => {
     const item = findItem(itemName);
@@ -301,9 +278,10 @@ function CartSheet({ open, onClose, cart, onQtyChange, onCheckout }) {
 }
 
 function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
-  const [form, setForm] = useState({ name: "", phone: "", address: "", email: "", payment: "ONLINE" });
+  const [form, setForm] = useState({ name: "", phone: "", address: "", email: "", payment: "ONLINE", lat: null, lng: null });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const cartTotal = computeOrder(cart).total;
 
   function set(key, val) {
@@ -412,16 +390,41 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
         </div>
 
         <div style={{ marginBottom: 16 }}>
-          <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: BRAND.text, marginBottom: 6 }}>Delivery Address</label>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+            <label style={{ fontSize: 13, fontWeight: 600, color: BRAND.text }}>Delivery Address</label>
+            <button
+              type="button"
+              onClick={() => setPickerOpen(true)}
+              style={{
+                background: "none", border: "none", cursor: "pointer", padding: 0,
+                color: BRAND.green, fontSize: 12.5, fontWeight: 600, fontFamily: "inherit",
+              }}
+            >📍 {form.lat != null ? "Re-pin location" : "Pin on map"}</button>
+          </div>
           <textarea
             placeholder="House no., street, area, Gurgaon"
             value={form.address}
-            onChange={e => set("address", e.target.value)}
+            onChange={e => {
+              setForm(f => ({ ...f, address: e.target.value, lat: null, lng: null }));
+              setErrors(er => ({ ...er, address: "" }));
+            }}
             rows={2}
             style={{ ...fieldStyle("address"), resize: "none" }}
           />
           {errors.address && <div style={{ fontSize: 12, color: "#DC2626", marginTop: 4 }}>{errors.address}</div>}
+          {form.lat != null && (
+            <div style={{ fontSize: 12, color: BRAND.green, marginTop: 4, fontWeight: 600 }}>✓ Location pinned on map</div>
+          )}
         </div>
+
+        <LocationPicker
+          open={pickerOpen}
+          onClose={() => setPickerOpen(false)}
+          onConfirm={({ address, lat, lng }) => {
+            setForm(f => ({ ...f, address: address || f.address, lat, lng }));
+            setErrors(e => ({ ...e, address: "" }));
+          }}
+        />
 
         <div style={{ marginBottom: 16 }}>
           <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: BRAND.text, marginBottom: 6 }}>
