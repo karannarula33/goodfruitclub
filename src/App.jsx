@@ -635,25 +635,6 @@ function Storefront() {
         </div>
       </section>
 
-      {/* Gift Boxes */}
-      {GIFT_BOXES.length > 0 && (
-        <section id="gift-boxes" style={{ background: BRAND.warm, padding: "36px 0 40px" }}>
-          <div className="container">
-            <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 26, color: BRAND.green, margin: "0 0 4px" }}>
-              🎁 Gift Boxes
-            </h2>
-            <p style={{ color: BRAND.muted, fontSize: 14, margin: "0 0 20px" }}>
-              Thoughtfully curated, hand-packed — perfect for gifting.
-            </p>
-            <div className="giftbox-grid">
-              {GIFT_BOXES.map((box) => (
-                <GiftBoxCard key={box.name} item={box} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* Fruit Menu */}
       <section id="menu" className="container" style={{ paddingBottom: 40 }}>
         <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 26, color: BRAND.green, margin: "0 0 4px" }}>Today's Fruits</h2>
@@ -677,6 +658,25 @@ function Storefront() {
           ))}
         </div>
       </section>
+
+      {/* Gift Boxes */}
+      {GIFT_BOXES.length > 0 && (
+        <section id="gift-boxes" style={{ background: BRAND.warm, padding: "36px 0 40px" }}>
+          <div className="container">
+            <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 26, color: BRAND.green, margin: "0 0 4px" }}>
+              🎁 Gift Boxes
+            </h2>
+            <p style={{ color: BRAND.muted, fontSize: 14, margin: "0 0 20px" }}>
+              Thoughtfully curated, hand-packed — perfect for gifting.
+            </p>
+            <div className="giftbox-grid">
+              {GIFT_BOXES.map((box) => (
+                <GiftBoxCard key={box.name} item={box} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Our Story */}
       <section className="container" style={{ paddingBottom: 40 }}>
