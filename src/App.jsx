@@ -11,6 +11,7 @@ import {
   formatRate,
   computeOrder,
   slugify,
+  getMinPurchasePrice,
 } from "../lib/catalog.js";
 import OrderPage from "./OrderPage.jsx";
 import OrdersPage from "./OrdersPage.jsx";
@@ -63,6 +64,7 @@ function FruitCard({ item, qty, onQtyChange }) {
   const displayRate = qty > 0 ? getPricePerUnit(item, qty) : item.basePrice;
   const total = Math.round(displayRate * qty);
   const nudge = qty > 0 ? getNextNudge(item, qty) : null;
+  const minPurchase = getMinPurchasePrice(item);
 
   const stepperBtn = (label, onClick, outline) => (
     <button
@@ -103,7 +105,7 @@ function FruitCard({ item, qty, onQtyChange }) {
             </span>
           ) : (
             <span style={{ color: BRAND.muted }}>
-              from <span style={{ color: BRAND.green, fontWeight: 700 }}>{formatRate(item.basePrice)}</span> / {item.unit}
+              from <span style={{ color: BRAND.green, fontWeight: 700 }}>{formatRate(minPurchase.price)}</span> / {minPurchase.label}
               {item.tiers.length > 0 && <span style={{ color: BRAND.muted }}> · bulk rates available</span>}
             </span>
           )}
