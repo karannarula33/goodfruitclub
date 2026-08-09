@@ -211,14 +211,7 @@ export default function OrderPage({ token }) {
           <h3 style={{ fontSize: 15, fontWeight: 700, color: BRAND.text, margin: "0 0 10px" }}>Delivery to</h3>
           <p style={{ fontSize: 14, color: BRAND.text, margin: "0 0 2px", fontWeight: 600 }}>{o.name}</p>
           <p style={{ fontSize: 13.5, color: BRAND.muted, margin: "0 0 2px" }}>{o.phone}</p>
-          <p style={{ fontSize: 13.5, color: BRAND.muted, margin: o.lat != null ? "0 0 6px" : 0 }}>{o.address}</p>
-          {o.lat != null && o.lng != null && (
-            <a
-              href={`https://www.google.com/maps/search/?api=1&query=${o.lat},${o.lng}`}
-              target="_blank" rel="noreferrer"
-              style={{ fontSize: 13, color: BRAND.green, fontWeight: 600 }}
-            >View pinned location on map →</a>
-          )}
+          <p style={{ fontSize: 13.5, color: BRAND.muted, margin: 0 }}>{o.address}</p>
         </div>
 
         <p style={{ textAlign: "center", fontSize: 12.5, color: BRAND.muted, marginTop: 20 }}>

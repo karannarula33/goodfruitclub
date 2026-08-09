@@ -31,9 +31,6 @@ function lineRows(order) {
 }
 
 function ownerEmailHtml(order, trackUrl) {
-  const mapLink = order.lat != null && order.lng != null
-    ? `<br/><a href="https://www.google.com/maps/search/?api=1&query=${order.lat},${order.lng}">View pinned location on map →</a>`
-    : '';
   return `
     <h2>New order ${escapeHtml(order.order_no)}</h2>
     <table style="border-collapse:collapse;font-size:14px">${lineRows({ items: order.items })}</table>
@@ -42,7 +39,7 @@ function ownerEmailHtml(order, trackUrl) {
     <hr/>
     <p><strong>Name:</strong> ${escapeHtml(order.customer_name)}<br/>
        <strong>Phone:</strong> ${escapeHtml(order.phone)}<br/>
-       <strong>Address:</strong> ${escapeHtml(order.address)}${order.email ? `<br/><strong>Email:</strong> ${escapeHtml(order.email)}` : ''}${mapLink}</p>
+       <strong>Address:</strong> ${escapeHtml(order.address)}${order.email ? `<br/><strong>Email:</strong> ${escapeHtml(order.email)}` : ''}</p>
     <p><a href="${trackUrl}">View / update order →</a></p>`;
 }
 
@@ -69,8 +66,6 @@ export async function POST(request) {
   const address = String(data.address || '').trim();
   const email = String(data.email || '').trim();
   const paymentMode = ['ONLINE', 'UPI', 'COD'].includes(data.payment) ? data.payment : 'COD';
-  const lat = Number.isFinite(data.lat) && data.lat >= -90 && data.lat <= 90 ? data.lat : null;
-  const lng = Number.isFinite(data.lng) && data.lng >= -180 && data.lng <= 180 ? data.lng : null;
 
   if (!name) return Response.json({ error: 'Name is required' }, { status: 400 });
   if (!/^\d{10}$/.test(phone)) return Response.json({ error: 'Valid 10-digit phone is required' }, { status: 400 });
@@ -94,8 +89,6 @@ export async function POST(request) {
       address,
       email: email || null,
       paymentMode,
-      lat,
-      lng,
     });
   } catch (err) {
     console.error('Failed to create order:', err);
