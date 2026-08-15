@@ -331,6 +331,13 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
     const e = validate();
     if (Object.keys(e).length > 0) { setErrors(e); return; }
     if (submitting) return;
+
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "conversion_event_outbound_click", {
+        cta_label: form.payment === "ONLINE" ? "pay_now" : "place_order_whatsapp",
+      });
+    }
+
     setSubmitting(true);
 
     let order = null;
