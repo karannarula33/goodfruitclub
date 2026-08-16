@@ -324,6 +324,9 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
     const extra = order
       ? `\n\nOrder No: ${order.orderNo}\nTrack: ${window.location.origin}/#/order/${order.token}`
       : "";
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "whatsapp_click", { cta_label: "checkout_whatsapp" });
+    }
     window.open(`https://wa.me/${WA}?text=${encodeURIComponent(base + extra)}`, "_blank");
   }
 
@@ -612,11 +615,16 @@ function Storefront() {
                   border: `2px solid ${BRAND.green}`,
                 }}>🎁 Gift Boxes</a>
               )}
-              <a href={`https://wa.me/${WA}?text=${encodeURIComponent("Hi! Tell me more about Good Fruit Club")}`} target="_blank" rel="noopener noreferrer" style={{
-                background: "transparent", color: BRAND.green, padding: "13px 28px",
-                borderRadius: 12, fontSize: 15, fontWeight: 600, textDecoration: "none",
-                border: `2px solid ${BRAND.green}`,
-              }}>WhatsApp Us</a>
+              <a
+                href={`https://wa.me/${WA}?text=${encodeURIComponent("Hi! Tell me more about Good Fruit Club")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => { if (typeof window.gtag === "function") window.gtag("event", "whatsapp_click", { cta_label: "hero_whatsapp_us" }); }}
+                style={{
+                  background: "transparent", color: BRAND.green, padding: "13px 28px",
+                  borderRadius: 12, fontSize: 15, fontWeight: 600, textDecoration: "none",
+                  border: `2px solid ${BRAND.green}`,
+                }}>WhatsApp Us</a>
             </div>
           </div>
         </div>

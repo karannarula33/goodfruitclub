@@ -113,6 +113,7 @@ export default function ProductPage({ slug }) {
                 href={enquireHref}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => { if (typeof window.gtag === "function") window.gtag("event", "whatsapp_click", { cta_label: "product_page_enquire", item_name: item.name }); }}
                 style={{
                   display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                   width: "100%", padding: "13px", background: BRAND.green, color: "#fff",
