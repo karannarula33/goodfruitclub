@@ -1,6 +1,13 @@
 import { useState, useRef } from "react";
 import { BRAND } from "./theme.js";
 
+// Every source image also has -sm.webp (~600w) and .webp (~1200w) variants
+// generated alongside it (same basename, case-insensitive extension swap).
+function webpSrcSet(src) {
+  const base = src.replace(/\.(jpe?g|png)$/i, "");
+  return `${base}-sm.webp 600w, ${base}.webp 1200w`;
+}
+
 export default function ImageCarousel({ images, color, badge }) {
   const [current, setCurrent] = useState(0);
   const touchStartX = useRef(null);
@@ -43,20 +50,29 @@ export default function ImageCarousel({ images, color, badge }) {
       onTouchEnd={handleTouchEnd}
     >
       {images.map((src, i) => (
-        <img
+        <picture
           key={i}
-          src={src}
-          alt=""
           style={{
-            position: "absolute", top: 0, left: 0,
-            width: "100%", height: "100%", objectFit: "cover",
+            position: "absolute", top: 0, left: 0, width: "100%", height: "100%",
+            display: "block",
             transform: `translateX(${(i - current) * 100}%)`,
             transition: "transform 0.3s ease",
             willChange: "transform",
           }}
-          loading="lazy"
-          onError={(e) => { e.target.style.display = "none"; }}
-        />
+        >
+          <source
+            type="image/webp"
+            srcSet={webpSrcSet(src)}
+            sizes="(min-width: 768px) 400px, 100vw"
+          />
+          <img
+            src={src}
+            alt=""
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+            loading="lazy"
+            onError={(e) => { e.target.style.display = "none"; }}
+          />
+        </picture>
       ))}
 
       {badge && (
