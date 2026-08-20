@@ -694,7 +694,7 @@ function Storefront() {
       )}
 
       {/* Our Story */}
-      <section className="container" style={{ paddingBottom: 40 }}>
+      <section className="container" style={{ paddingTop: 40, paddingBottom: 40 }}>
         <div style={{ background: BRAND.green, borderRadius: 16, padding: "32px 24px", color: "#fff", maxWidth: 640, margin: "0 auto" }}>
           <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, margin: "0 0 14px", fontWeight: 400 }}>Our Story</h2>
           <p style={{ fontSize: 14.5, lineHeight: 1.75, margin: "0 0 12px", opacity: 0.9 }}>
