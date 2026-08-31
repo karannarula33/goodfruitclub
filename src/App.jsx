@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, useRef, Fragment } from "react";
 import {
   FRUITS,
   GIFT_BOXES,
@@ -503,6 +503,16 @@ function Storefront() {
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const searchInputRef = useRef(null);
+
+  function goToSearch() {
+    // Jump to the fruit search field and focus it — scroll first so the
+    // input has landed in the sticky-nav-adjusted viewport before we call
+    // focus (otherwise some browsers re-scroll to the focused element using
+    // the pre-scroll layout).
+    document.getElementById("menu")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => searchInputRef.current?.focus(), 350);
+  }
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 50);
@@ -575,6 +585,15 @@ function Storefront() {
         <div className="container" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <img src="/logo.svg" alt="Good Fruit Club" style={{ height: 40, width: "auto" }} />
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <button
+              onClick={goToSearch}
+              aria-label="Search fruits"
+              style={{
+                background: "none", border: "none", cursor: "pointer", padding: 0,
+                color: BRAND.green, fontSize: 13, fontWeight: 600, textDecoration: "none",
+                fontFamily: "inherit", display: "flex", alignItems: "center", gap: 5,
+              }}
+            ><span aria-hidden="true">🔍</span> Search</button>
             <button
               onClick={() => navigate("#/orders")}
               style={{
@@ -683,6 +702,7 @@ function Storefront() {
             fontSize: 16, pointerEvents: "none", opacity: 0.6,
           }}>🔍</span>
           <input
+            ref={searchInputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
