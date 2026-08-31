@@ -69,12 +69,13 @@ function FruitCard({ item, qty, onQtyChange }) {
   const stepperBtn = (label, onClick, outline) => (
     <button
       onClick={onClick}
+      className="fruit-stepper-btn"
       style={{
-        width: 46, height: 46, borderRadius: 10, flexShrink: 0,
+        borderRadius: 10, flexShrink: 0,
         border: outline ? `2px solid ${BRAND.green}` : "none",
         background: outline ? "#fff" : BRAND.green,
         color: outline ? BRAND.green : "#fff",
-        fontSize: 26, fontWeight: 400, lineHeight: 1,
+        fontWeight: 400, lineHeight: 1,
         cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
       }}
     >{label}</button>
@@ -83,7 +84,7 @@ function FruitCard({ item, qty, onQtyChange }) {
   const productHref = `#/product/${slugify(item.name)}`;
 
   return (
-    <div style={{
+    <div className="fruit-card" style={{
       background: "#fff", borderRadius: 16, overflow: "hidden",
       boxShadow: "0 1px 4px rgba(0,0,0,0.06), 0 6px 20px rgba(0,0,0,0.04)",
       width: "100%",
@@ -92,7 +93,7 @@ function FruitCard({ item, qty, onQtyChange }) {
         <ImageCarousel images={item.images} color={item.color} badge={item.badge} />
       </a>
 
-      <div style={{ padding: "18px 20px 20px" }}>
+      <div className="fruit-card-body">
         <a href={productHref} style={{ display: "block", color: "inherit", textDecoration: "none" }}>
           <h3 style={{ fontSize: 20, fontWeight: 700, color: BRAND.text, margin: "0 0 6px", fontFamily: "'DM Serif Display', serif" }}>{item.name}</h3>
         </a>
@@ -501,6 +502,7 @@ function Storefront() {
   });
   const [cartOpen, setCartOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 50);
@@ -540,6 +542,23 @@ function Storefront() {
     setCart([]);
     setCheckoutOpen(false);
   }
+
+  // Search filters the menu by fruit name or tagline. Empty query shows
+  // everything with the usual per-category grouping.
+  const q = query.trim().toLowerCase();
+  const filteredCats = q
+    ? FRUITS
+        .map((cat) => ({
+          ...cat,
+          items: cat.items.filter(
+            (item) =>
+              item.name.toLowerCase().includes(q) ||
+              item.tagline.toLowerCase().includes(q)
+          ),
+        }))
+        .filter((cat) => cat.items.length > 0)
+    : FRUITS;
+  const noMatches = q && filteredCats.length === 0;
 
   return (
     <div style={{ fontFamily: "'DM Sans', 'Segoe UI', sans-serif", background: BRAND.cream, color: BRAND.text, minHeight: "100vh" }}>
@@ -653,25 +672,68 @@ function Storefront() {
       {/* Fruit Menu */}
       <section id="menu" className="container" style={{ paddingBottom: 40 }}>
         <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 26, color: BRAND.green, margin: "0 0 4px" }}>Today's Fruits</h2>
-        <p style={{ color: BRAND.muted, fontSize: 14, margin: "0 0 8px" }}>
+        <p style={{ color: BRAND.muted, fontSize: 14, margin: "0 0 14px" }}>
           Before 10 AM → same day &nbsp;·&nbsp; After 10 AM → tomorrow morning
         </p>
 
-        <div className="fruit-grid">
-          {FRUITS.map((cat, ci) => (
-            <Fragment key={ci}>
-              <h3 className="category-heading">{cat.category}</h3>
-              {cat.items.map((item, ii) => (
-                <FruitCard
-                  key={ii}
-                  item={item}
-                  qty={getQty(item.name)}
-                  onQtyChange={(qty) => setQty(item, qty)}
-                />
-              ))}
-            </Fragment>
-          ))}
+        {/* Search */}
+        <div style={{ position: "relative", marginBottom: 20 }}>
+          <span style={{
+            position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)",
+            fontSize: 16, pointerEvents: "none", opacity: 0.6,
+          }}>🔍</span>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search fruits — mango, cherry, kiwi…"
+            aria-label="Search fruits"
+            style={{
+              width: "100%", boxSizing: "border-box",
+              padding: "12px 40px 12px 40px", borderRadius: 12,
+              border: `1.5px solid ${BRAND.green}22`, background: "#fff",
+              fontSize: 15, fontFamily: "inherit", color: BRAND.text, outline: "none",
+            }}
+            onFocus={(e) => { e.target.style.borderColor = BRAND.green; }}
+            onBlur={(e) => { e.target.style.borderColor = `${BRAND.green}22`; }}
+          />
+          {query && (
+            <button
+              onClick={() => setQuery("")}
+              aria-label="Clear search"
+              style={{
+                position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)",
+                width: 26, height: 26, borderRadius: "50%", border: "none",
+                background: `${BRAND.green}12`, color: BRAND.green, fontSize: 15,
+                cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+            >×</button>
+          )}
         </div>
+
+        {noMatches ? (
+          <p style={{ color: BRAND.muted, textAlign: "center", padding: "28px 0", fontSize: 15 }}>
+            No fruits match “{query}”. Try another name.
+          </p>
+        ) : (
+          <div className="fruit-grid">
+            {filteredCats.map((cat, ci) => (
+              <Fragment key={ci}>
+                {/* When searching, per-category headings would fragment a short
+                    result list — hide them and show one flat grid. */}
+                {!q && <h3 className="category-heading">{cat.category}</h3>}
+                {cat.items.map((item, ii) => (
+                  <FruitCard
+                    key={ii}
+                    item={item}
+                    qty={getQty(item.name)}
+                    onQtyChange={(qty) => setQty(item, qty)}
+                  />
+                ))}
+              </Fragment>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Gift Boxes */}

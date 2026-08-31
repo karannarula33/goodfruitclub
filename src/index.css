@@ -47,15 +47,16 @@
 }
 
 .fruit-grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
   margin-top: 12px;
+  align-items: start;
 }
 .category-heading {
+  grid-column: 1 / -1;
   width: 100%;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: #1B4332;
   text-transform: uppercase;
@@ -64,12 +65,14 @@
   padding: 8px 0;
   border-bottom: 2px solid #1B433218;
 }
+/* Tighten card internals on the narrow 2-up mobile grid so the stepper and
+   copy don't feel cramped in a ~160px-wide column. */
+.fruit-card .fruit-card-body { padding: 14px 14px 16px; }
+.fruit-stepper-btn { width: 40px; height: 40px; font-size: 22px; }
 @media (min-width: 768px) {
   .fruit-grid {
-    display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    align-items: start;
     margin-top: 20px;
   }
   /* One continuous grid across all categories on desktop — no per-category
@@ -77,6 +80,8 @@
   .category-heading {
     display: none;
   }
+  .fruit-card .fruit-card-body { padding: 18px 20px 20px; }
+  .fruit-stepper-btn { width: 46px; height: 46px; font-size: 26px; }
 }
 
 .giftbox-grid {
