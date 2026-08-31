@@ -95,11 +95,11 @@ function FruitCard({ item, qty, onQtyChange }) {
 
       <div className="fruit-card-body">
         <a href={productHref} style={{ display: "block", color: "inherit", textDecoration: "none" }}>
-          <h3 style={{ fontSize: 20, fontWeight: 700, color: BRAND.text, margin: "0 0 6px", fontFamily: "'DM Serif Display', serif" }}>{item.name}</h3>
+          <h3 className="fruit-card-name" style={{ fontSize: 20, fontWeight: 700, color: BRAND.text, margin: "0 0 6px", fontFamily: "'DM Serif Display', serif" }}>{item.name}</h3>
         </a>
-        <p style={{ fontSize: 13.5, color: BRAND.muted, margin: "0 0 14px", lineHeight: 1.5 }}>{item.tagline}</p>
+        <p className="fruit-card-tagline" style={{ fontSize: 13.5, color: BRAND.muted, margin: "0 0 14px", lineHeight: 1.5 }}>{item.tagline}</p>
 
-        <div style={{ marginBottom: 14, fontSize: 14 }}>
+        <div className="fruit-card-action" style={{ marginBottom: 14, fontSize: 14 }}>
           {qty > 0 ? (
             <span style={{ color: BRAND.green, fontWeight: 600 }}>
               {formatRate(displayRate)} / {item.unit}

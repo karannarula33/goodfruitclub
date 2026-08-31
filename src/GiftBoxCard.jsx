@@ -19,7 +19,7 @@ export default function GiftBoxCard({ item }) {
       display: "flex", flexDirection: "column",
     }}>
       <a href={productHref} style={{ display: "block", color: "inherit", textDecoration: "none" }}>
-        <ImageCarousel images={item.images} color={item.color} badge={item.badge || "Gift Box"} />
+        <ImageCarousel images={item.images} color={item.color} badge={item.badge || "Gift Box"} aspectRatio="1/1" />
       </a>
 
       {/* Boxes have wildly different amounts of copy (2-item vs 10-item
@@ -28,23 +28,25 @@ export default function GiftBoxCard({ item }) {
           not across rows. The tagline/contents paragraphs below are
           line-clamped to a fixed line count so every card's text block is
           the same height regardless of row position; flex:1 + marginTop:auto
-          on the CTA then pins it to the bottom for any remaining slack. */}
-      <div style={{ padding: "20px 22px 22px", display: "flex", flexDirection: "column", flex: "1 1 auto" }}>
+          on the CTA then pins it to the bottom for any remaining slack.
+          Line-clamps and padding are kept tight so the photo (now a taller
+          1:1 crop above) reads as the dominant part of the card. */}
+      <div style={{ padding: "14px 18px 16px", display: "flex", flexDirection: "column", flex: "1 1 auto" }}>
         <a href={productHref} style={{ display: "block", color: "inherit", textDecoration: "none" }}>
-          <h3 style={{ fontSize: 21, fontWeight: 700, color: BRAND.text, margin: "0 0 8px", fontFamily: "'DM Serif Display', serif" }}>
+          <h3 style={{ fontSize: 19, fontWeight: 700, color: BRAND.text, margin: "0 0 5px", fontFamily: "'DM Serif Display', serif" }}>
             {item.name}
           </h3>
         </a>
         <p style={{
-          fontSize: 13.5, color: BRAND.muted, margin: "0 0 10px", lineHeight: 1.55,
-          display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden",
+          fontSize: 13, color: BRAND.muted, margin: "0 0 7px", lineHeight: 1.5,
+          display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
         }}>
           {item.tagline}
         </p>
         {item.contents && (
           <p style={{
-            fontSize: 12.5, color: BRAND.muted, margin: "0 0 18px", lineHeight: 1.55,
-            display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical", overflow: "hidden",
+            fontSize: 12, color: BRAND.muted, margin: "0 0 12px", lineHeight: 1.5,
+            display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
           }}>
             <strong style={{ color: BRAND.text }}>Contains:</strong> {item.contents}
           </p>

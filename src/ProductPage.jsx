@@ -98,9 +98,13 @@ export default function ProductPage({ slug }) {
 
             <div style={{ marginBottom: 18, fontSize: 15 }}>
               {giftBox ? (
-                <span style={{ color: BRAND.muted }}>
-                  from <span style={{ color: BRAND.green, fontWeight: 700 }}>{formatRate(item.basePrice)}</span> / {item.unit}
-                </span>
+                item.basePrice == null ? (
+                  <span style={{ color: BRAND.muted }}>Price shared on enquiry</span>
+                ) : (
+                  <span style={{ color: BRAND.muted }}>
+                    from <span style={{ color: BRAND.green, fontWeight: 700 }}>{formatRate(item.basePrice)}</span> / {item.unit}
+                  </span>
+                )
               ) : (
                 <span style={{ color: BRAND.green, fontWeight: 600 }}>
                   {formatRate(rate)} / {item.unit}

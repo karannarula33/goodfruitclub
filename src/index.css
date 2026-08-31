@@ -51,7 +51,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   margin-top: 12px;
-  align-items: start;
+  align-items: stretch;
 }
 .category-heading {
   grid-column: 1 / -1;
@@ -69,6 +69,20 @@
    copy don't feel cramped in a ~160px-wide column. */
 .fruit-card .fruit-card-body { padding: 14px 14px 16px; }
 .fruit-stepper-btn { width: 40px; height: 40px; font-size: 22px; }
+/* Grid rows stretch cards to a common height (align-items: stretch above),
+   but that only equalizes cards within the same row — a card's own content
+   (image + name + clamped tagline) still needs to fill that height evenly
+   rather than leaving ragged whitespace, so the card and its body flex
+   vertically and the price/action block is pinned to the bottom. */
+.fruit-card { height: 100%; display: flex; flex-direction: column; }
+.fruit-card .fruit-card-body { flex: 1 1 auto; display: flex; flex-direction: column; }
+.fruit-card-name {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.fruit-card-tagline {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.fruit-card-action { margin-top: auto; }
 @media (min-width: 768px) {
   .fruit-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -90,12 +104,18 @@
   align-items: center;
   gap: 24px;
 }
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .giftbox-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
+    gap: 20px;
     align-items: stretch;
+  }
+}
+@media (min-width: 1024px) {
+  .giftbox-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
   }
 }
 

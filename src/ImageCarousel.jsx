@@ -8,7 +8,7 @@ function webpSrcSet(src) {
   return `${base}-sm.webp 600w, ${base}.webp 1200w`;
 }
 
-export default function ImageCarousel({ images, color, badge }) {
+export default function ImageCarousel({ images, color, badge, aspectRatio = "4/3" }) {
   const [current, setCurrent] = useState(0);
   const touchStartX = useRef(null);
   const hasMultiple = images.length > 1;
@@ -42,7 +42,7 @@ export default function ImageCarousel({ images, color, badge }) {
       tabIndex={hasMultiple ? 0 : undefined}
       onKeyDown={hasMultiple ? handleKeyDown : undefined}
       style={{
-        width: "100%", aspectRatio: "4/3", position: "relative",
+        width: "100%", aspectRatio, position: "relative",
         background: `linear-gradient(135deg, ${color}22, ${color}44)`,
         overflow: "hidden", outline: "none",
       }}
