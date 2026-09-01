@@ -25,6 +25,31 @@ import ImageCarousel from "./ImageCarousel.jsx";
 import GiftBoxCard from "./GiftBoxCard.jsx";
 
 
+function InfoIcon({ children }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={BRAND.green}
+      strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {children}
+    </svg>
+  );
+}
+const ClockIcon = () => (
+  <InfoIcon><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3.5 2" /></InfoIcon>
+);
+const SunriseIcon = () => (
+  <InfoIcon>
+    <path d="M12 3v4M4.5 10.5l1.8 1.8M19.5 10.5l-1.8 1.8M2 17h20" />
+    <path d="M6 17a6 6 0 0 1 12 0" />
+  </InfoIcon>
+);
+const DoorIcon = () => (
+  <InfoIcon>
+    <rect x="7" y="3" width="10" height="18" rx="1" />
+    <path d="M4 21h16" />
+    <circle cx="14" cy="12.5" r="0.6" fill={BRAND.green} stroke="none" />
+  </InfoIcon>
+);
+
 function buildWhatsAppMessage(cart, details) {
   const lines = cart.map(({ itemName, qty }) => {
     const item = findItem(itemName);
@@ -693,21 +718,22 @@ function Storefront() {
         </div>
       </header>
 
-      {/* How it works */}
+      {/* Delivery & sourcing info */}
       <section className="container" style={{ paddingBottom: 40 }}>
-        <div className="how-grid" style={{
-          background: BRAND.green, borderRadius: 16, padding: "24px 20px",
-          display: "grid", gap: 16,
+        <div className="info-bar" style={{
+          background: BRAND.warm, borderRadius: 16, padding: "6px 24px",
         }}>
           {[
-            { icon: "🛒", text: "Browse & add to cart" },
-            { icon: "📝", text: "Checkout with your details" },
-            { icon: "🌅", text: "We source fresh next morning" },
-            { icon: "🚪", text: "Delivered to your door" },
+            { Icon: ClockIcon, title: "Order before 10 AM", sub: "Delivered the same day — later orders arrive fresh the next morning" },
+            { Icon: SunriseIcon, title: "Hand-picked each morning", sub: "Sourced fresh to order, never warehoused" },
+            { Icon: DoorIcon, title: "Straight to your doorstep", sub: "No middlemen — packed by hand, brought by us" },
           ].map((s, i) => (
-            <div key={i} style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 36, marginBottom: 8 }}>{s.icon}</div>
-              <div style={{ color: "#fff", fontSize: 20, fontWeight: 500, opacity: 0.9, lineHeight: 1.35 }}>{s.text}</div>
+            <div className="info-item" key={i}>
+              <s.Icon />
+              <div>
+                <div style={{ color: BRAND.text, fontSize: 14.5, fontWeight: 700, lineHeight: 1.3 }}>{s.title}</div>
+                <div style={{ color: BRAND.muted, fontSize: 13, lineHeight: 1.45, marginTop: 2 }}>{s.sub}</div>
+              </div>
             </div>
           ))}
         </div>
@@ -715,10 +741,7 @@ function Storefront() {
 
       {/* Fruit Menu */}
       <section id="menu" className="container" style={{ paddingBottom: 40 }}>
-        <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 26, color: BRAND.green, margin: "0 0 4px" }}>Today's Fruits</h2>
-        <p style={{ color: BRAND.muted, fontSize: 14, margin: "0 0 14px" }}>
-          Before 10 AM → same day &nbsp;·&nbsp; After 10 AM → tomorrow morning
-        </p>
+        <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 26, color: BRAND.green, margin: "0 0 14px" }}>Today's Fruits</h2>
 
         {/* Search */}
         <div style={{ position: "relative", marginBottom: 20 }}>
