@@ -858,6 +858,21 @@ function Storefront() {
 export default function App() {
   const hash = useHashRoute();
   const route = hash.replace(/^#/, "");
+  const isFirstRoute = useRef(true);
+
+  useEffect(() => {
+    // The initial gtag('config', ...) call in index.html already sends a
+    // page_view for whatever route is loaded first; this only needs to cover
+    // the client-side navigations after that, which the hash router doesn't
+    // trigger a real page load for.
+    if (isFirstRoute.current) {
+      isFirstRoute.current = false;
+      return;
+    }
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "page_view", { page_path: route, page_location: window.location.href });
+    }
+  }, [route]);
 
   const orderMatch = route.match(/^\/order\/(.+)$/);
   if (orderMatch) return <OrderPage token={decodeURIComponent(orderMatch[1])} />;
