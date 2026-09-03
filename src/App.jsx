@@ -328,6 +328,9 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
     if (typeof window.gtag === "function") {
       window.gtag("event", "whatsapp_click", { cta_label: "checkout_whatsapp" });
     }
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "Contact");
+    }
     window.open(`https://wa.me/${WA}?text=${encodeURIComponent(base + extra)}`, "_blank");
   }
 
@@ -340,6 +343,9 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
       window.gtag("event", "conversion_event_outbound_click", {
         cta_label: form.payment === "ONLINE" ? "pay_now" : "place_order_whatsapp",
       });
+    }
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "InitiateCheckout");
     }
 
     setSubmitting(true);
@@ -657,7 +663,10 @@ function Storefront() {
                 href={`https://wa.me/${WA}?text=${encodeURIComponent("Hi! Tell me more about Good Fruit Club")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => { if (typeof window.gtag === "function") window.gtag("event", "whatsapp_click", { cta_label: "hero_whatsapp_us" }); }}
+                onClick={() => {
+                  if (typeof window.gtag === "function") window.gtag("event", "whatsapp_click", { cta_label: "hero_whatsapp_us" });
+                  if (typeof window.fbq === "function") window.fbq("track", "Contact");
+                }}
                 style={{
                   background: "transparent", color: BRAND.green, padding: "13px 28px",
                   borderRadius: 12, fontSize: 15, fontWeight: 600, textDecoration: "none",
@@ -861,8 +870,8 @@ export default function App() {
   const isFirstRoute = useRef(true);
 
   useEffect(() => {
-    // The initial gtag('config', ...) call in index.html already sends a
-    // page_view for whatever route is loaded first; this only needs to cover
+    // The initial gtag('js'...)/fbq('track', 'PageView') calls in index.html
+    // already cover whatever route is loaded first; this only needs to cover
     // the client-side navigations after that, which the hash router doesn't
     // trigger a real page load for.
     if (isFirstRoute.current) {
@@ -871,6 +880,9 @@ export default function App() {
     }
     if (typeof window.gtag === "function") {
       window.gtag("event", "page_view", { page_path: route, page_location: window.location.href });
+    }
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "PageView");
     }
   }, [route]);
 
