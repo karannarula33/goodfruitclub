@@ -373,6 +373,22 @@ function CheckoutForm({ open, onClose, cart, onOrderPlaced }) {
 
     saveOrder({ token: order.token, orderNo: order.orderNo, total: order.total });
 
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "purchase", {
+        transaction_id: order.orderNo,
+        value: order.total,
+        currency: "INR",
+        items: computeOrder(cart).lines.map((l) => ({
+          item_name: l.itemName,
+          quantity: l.qty,
+          price: l.pricePerUnit,
+        })),
+      });
+    }
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "Purchase", { value: order.total, currency: "INR" });
+    }
+
     if (form.payment === "ONLINE") {
       // Open Razorpay. The order is already saved, so regardless of the payment
       // outcome we clear the cart and send the customer to their tracking page
