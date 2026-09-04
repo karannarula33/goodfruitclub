@@ -870,7 +870,7 @@ function Storefront() {
           Fresh finds, delivered home · Gurgaon
         </p>
         <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 13, margin: "0 0 6px" }}>
-          WhatsApp: 9911777333
+          WhatsApp: +91 87000 53315
         </p>
         <p style={{ color: "rgba(255,255,255,0.3)", fontSize: 11, marginTop: 20 }}>
           © 2026 Good Fruit Club · goodfruit.club
