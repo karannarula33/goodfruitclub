@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, Fragment } from "react";
 import {
   FRUITS,
   GIFT_BOXES,
+  BESTSELLERS,
   WA,
   findItem,
   getPricePerUnit,
@@ -42,11 +43,10 @@ const SunriseIcon = () => (
     <path d="M6 17a6 6 0 0 1 12 0" />
   </InfoIcon>
 );
-const DoorIcon = () => (
+const ShieldIcon = () => (
   <InfoIcon>
-    <rect x="7" y="3" width="10" height="18" rx="1" />
-    <path d="M4 21h16" />
-    <circle cx="14" cy="12.5" r="0.6" fill={BRAND.green} stroke="none" />
+    <path d="M12 3l7 3v5c0 5-3.2 7.8-7 9-3.8-1.2-7-4-7-9V6l7-3z" />
+    <path d="M9 12l2 2 4-4" />
   </InfoIcon>
 );
 
@@ -721,23 +721,42 @@ function Storefront() {
       {/* Delivery & sourcing info */}
       <section className="container" style={{ paddingBottom: 40 }}>
         <div className="info-bar" style={{
-          background: BRAND.warm, borderRadius: 16, padding: "6px 24px",
+          background: BRAND.warm, borderRadius: 16,
         }}>
           {[
-            { Icon: ClockIcon, title: "Order before 10 AM", sub: "Delivered the same day — later orders arrive fresh the next morning" },
-            { Icon: SunriseIcon, title: "Hand-picked each morning", sub: "Sourced fresh to order, never warehoused" },
-            { Icon: DoorIcon, title: "Straight to your doorstep", sub: "No middlemen — packed by hand, brought by us" },
+            { Icon: ClockIcon, label: "Order by 10 AM — delivered same day" },
+            { Icon: SunriseIcon, label: "Hand-picked fresh each morning" },
+            { Icon: ShieldIcon, label: "Delivered safely to your door, daily" },
           ].map((s, i) => (
             <div className="info-item" key={i}>
               <s.Icon />
-              <div>
-                <div style={{ color: BRAND.text, fontSize: 14.5, fontWeight: 700, lineHeight: 1.3 }}>{s.title}</div>
-                <div style={{ color: BRAND.muted, fontSize: 13, lineHeight: 1.45, marginTop: 2 }}>{s.sub}</div>
-              </div>
+              <span style={{ color: BRAND.text, fontSize: 13.5, fontWeight: 600, lineHeight: 1.3 }}>{s.label}</span>
             </div>
           ))}
         </div>
       </section>
+
+      {/* Bestsellers */}
+      {BESTSELLERS.length > 0 && (
+        <section id="bestsellers" className="container" style={{ paddingBottom: 40 }}>
+          <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 26, color: BRAND.green, margin: "0 0 4px" }}>
+            ⭐ Bestsellers
+          </h2>
+          <p style={{ color: BRAND.muted, fontSize: 14, margin: "0 0 20px" }}>
+            The fruits our customers keep coming back for.
+          </p>
+          <div className="bestseller-scroll">
+            {BESTSELLERS.map((item) => (
+              <FruitCard
+                key={item.name}
+                item={item}
+                qty={getQty(item.name)}
+                onQtyChange={(qty) => setQty(item, qty)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Fruit Menu */}
       <section id="menu" className="container" style={{ paddingBottom: 40 }}>
